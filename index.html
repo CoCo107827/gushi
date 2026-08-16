@@ -3,764 +3,522 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#6b8e23">
+<meta name="theme-color" content="#58cc02">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="古诗打卡">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-startup-image" href="splash-bg.jpg" media="(orientation: portrait)">
-<title>古诗打卡工作台 · 春日集星</title>
+<title>古诗打卡 · 关卡闯关</title>
 <style>
-  :root {
-    --bg-1: #fff5f7;
-    --bg-2: #ffe4ec;
-    --bg-3: #fde2e4;
-    --card: rgba(255, 255, 255, 0.72);
-    --card-2: rgba(255, 255, 255, 0.9);
-    --border: rgba(233, 109, 135, 0.18);
-    --border-strong: rgba(233, 109, 135, 0.35);
-    --text: #5c3a4a;
-    --text-muted: #9a7384;
-    --accent: #e76f8e;
-    --accent-2: #f4a4b7;
-    --accent-deep: #d65a7a;
-    --success: #7cb342;
-    --success-2: #8bc34a;
-    --danger: #e57373;
-    --primary: #c6487a;
-    --primary-2: #d65a7a;
-    --gold: #f0a830;
-    --sakura-1: #ffb7c5;
-    --sakura-2: #ffccd5;
-    --sakura-3: #ffe0e9;
-    --leaf: #a8d8a0;
-    --radius: 18px;
-    --shadow: 0 8px 30px rgba(233, 109, 135, 0.18);
-    --shadow-hover: 0 12px 40px rgba(233, 109, 135, 0.25);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    min-height: 100%;
-    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
-    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-3) 100%);
-    background-attachment: fixed;
-    color: var(--text);
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(circle at 12% 18%, rgba(255, 183, 197, 0.45), transparent 40%),
-      radial-gradient(circle at 88% 75%, rgba(168, 216, 160, 0.25), transparent 45%),
-      radial-gradient(circle at 50% 50%, rgba(255, 204, 213, 0.2), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 1px, transparent 1px),
-      radial-gradient(circle at 70% 60%, rgba(255,255,255,0.3) 1px, transparent 1px);
-    background-size: 60px 60px, 90px 90px;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-  }
+:root {
+  --green: #58cc02;
+  --green-d: #58a700;
+  --green-l: #89e219;
+  --blue: #1cb0f6;
+  --blue-d: #1899d6;
+  --purple: #ce82ff;
+  --gold: #ffc800;
+  --gold-d: #e6a700;
+  --red: #ff4b4b;
+  --orange: #ff9600;
+  --pink: #ff86d0;
+  --text: #3c3c3c;
+  --text-l: #777777;
+  --text-ll: #afafaf;
+  --border: #e5e5e5;
+  --bg: #ffffff;
+  --card: #ffffff;
+  --shadow-btn: 0 4px 0;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+body { background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%); }
 
-  /* 樱花飘落层 */
-  #sakura-layer {
-    position: fixed; inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .petal {
-    position: absolute;
-    top: -30px;
-    font-size: 18px;
-    opacity: 0.85;
-    animation: petalFall linear infinite;
-    user-select: none;
-  }
-  @keyframes petalFall {
-    0% { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.85; }
-    90% { opacity: 0.85; }
-    100% { transform: translateY(105vh) translateX(var(--drift, 60px)) rotate(720deg); opacity: 0; }
-  }
+/* 顶部栏 */
+.top-bar {
+  position: sticky; top: 0; z-index: 50;
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.top-left { display: flex; align-items: center; gap: 10px; }
+.stars-display {
+  display: flex; align-items: center; gap: 6px;
+  background: #fff8e0;
+  border: 2px solid var(--gold);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-weight: 800; font-size: 18px;
+  color: var(--gold-d);
+  box-shadow: var(--shadow-btn) var(--gold-d);
+}
+.stars-display .star-ico { font-size: 20px; }
+.streak-display {
+  display: flex; align-items: center; gap: 5px;
+  background: #fff0e0;
+  border: 2px solid var(--orange);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 800; font-size: 15px;
+  color: var(--orange);
+  box-shadow: var(--shadow-btn) var(--orange);
+}
+.streak-display .flame { animation: flicker 1s ease-in-out infinite; }
+@keyframes flicker { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
+.top-right { display: flex; gap: 8px; }
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .1s;
+}
+.icon-btn:active { transform: translateY(2px); }
 
-  .app {
-    position: relative; z-index: 2;
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 28px 20px 100px;
-  }
+/* 进度条 */
+.progress-section {
+  padding: 16px;
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+}
+.progress-info {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.progress-info .label { font-weight: 700; font-size: 14px; color: var(--text); }
+.progress-info .count { font-size: 13px; color: var(--text-l); }
+.progress-info .count b { color: var(--gold-d); font-size: 16px; }
+.progress-bar {
+  height: 16px;
+  background: #e5e5e5;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--green-l));
+  border-radius: 999px;
+  transition: width .6s ease;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shine 2s linear infinite;
+}
+@keyframes shine { 0%{transform:translateX(-100%);} 100%{transform:translateX(100%);} }
 
-  /* 头部 */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 16px;
-    margin-bottom: 28px;
-  }
-  .brand { display: flex; align-items: center; gap: 14px; }
-  .brand-icon {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
-    box-shadow: 0 8px 20px rgba(233, 109, 135, 0.4);
-    animation: sway 4s ease-in-out infinite;
-    position: relative;
-  }
-  .brand-icon::after {
-    content: '🌸';
-    position: absolute; top: -8px; right: -6px;
-    font-size: 20px;
-    animation: float 3s ease-in-out infinite;
-  }
-  @keyframes sway {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(3deg); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-  }
-  .brand h1 {
-    font-size: 24px; font-weight: 800; letter-spacing: 1px;
-    color: var(--primary);
-  }
-  .brand p {
-    font-size: 13px; color: var(--text-muted); margin-top: 3px;
-  }
-  .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .today-badge {
-    padding: 10px 18px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 13px;
-    color: var(--text-muted);
-    backdrop-filter: blur(10px);
-  }
-  .today-badge span { color: var(--accent); font-weight: 700; }
-  .streak-pill {
-    display: flex; align-items: center; gap: 6px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, rgba(255, 183, 197, 0.35), rgba(244, 164, 183, 0.25));
-    border: 1px solid var(--border-strong);
-    border-radius: 999px;
-    font-weight: 700;
-    color: var(--accent-deep);
-  }
-  .streak-pill .flame { font-size: 18px; animation: flicker 1.2s ease-in-out infinite; }
-  @keyframes flicker {
-    0%, 100% { transform: scale(1) rotate(-3deg); }
-    50% { transform: scale(1.15) rotate(3deg); }
-  }
+/* 今日提醒横幅 */
+.daily-banner {
+  margin: 12px 16px 0;
+  background: linear-gradient(135deg, #e7f5ff, #fff8e0);
+  border: 2px solid var(--blue);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: none;
+  align-items: center; gap: 12px;
+  font-weight: 600; font-size: 14px;
+  animation: bounceIn .4s;
+}
+.daily-banner.show { display: flex; }
+.daily-banner .ico { font-size: 28px; }
+.daily-banner .btn-go {
+  margin-left: auto;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 800; font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn) var(--blue-d);
+}
+.daily-banner .btn-go:active { transform: translateY(2px); box-shadow: none; }
+@keyframes bounceIn { 0%{transform:scale(0.9);opacity:0;} 100%{transform:scale(1);opacity:1;} }
 
-  /* 统计卡 */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-    backdrop-filter: blur(10px);
-    transition: transform .2s, box-shadow .2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .stat-card::before {
-    content: '';
-    position: absolute; top: -20px; right: -20px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: var(--glow, rgba(231,111,142,0.1));
-    filter: blur(15px);
-  }
-  .stat-card::after {
-    content: var(--deco, '🌸');
-    position: absolute; bottom: 8px; right: 12px;
-    font-size: 28px;
-    opacity: 0.25;
-  }
-  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-  .stat-label {
-    font-size: 12px; color: var(--text-muted);
-    margin-bottom: 8px; letter-spacing: 1px;
-    position: relative; z-index: 1;
-  }
-  .stat-value {
-    font-size: 34px; font-weight: 800;
-    display: flex; align-items: baseline; gap: 4px;
-    position: relative; z-index: 1;
-  }
-  .stat-value .unit { font-size: 14px; color: var(--text-muted); font-weight: 500; }
-  .stat-value.gold { color: var(--gold); }
-  .stat-value.green { color: var(--success); }
-  .stat-value.pink { color: var(--accent); }
-  .stat-value.purple { color: var(--primary); }
-  .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; position: relative; z-index: 1; }
+/* Tab */
+.tab-bar {
+  display: flex; gap: 4px; padding: 12px 16px 0;
+}
+.tab {
+  flex: 1;
+  padding: 12px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  color: var(--text-ll);
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+}
+.tab.active {
+  color: var(--green-d);
+  border-color: var(--border);
+  border-bottom: 2px solid #fff;
+  margin-bottom: -2px;
+  position: relative; z-index: 2;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-  /* 进度条 */
-  .progress-wrap {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 24px;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-  }
-  .progress-wrap::before {
-    content: '🌺';
-    position: absolute; top: 10px; right: 16px;
-    font-size: 24px; opacity: 0.3;
-    animation: sway 5s ease-in-out infinite;
-  }
-  .progress-head {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
-  }
-  .progress-head h3 { font-size: 16px; font-weight: 700; color: var(--primary); }
-  .progress-head .count { font-size: 14px; color: var(--text-muted); }
-  .progress-head .count b { color: var(--accent); font-size: 20px; }
-  .progress-bar {
-    height: 16px;
-    background: rgba(233, 109, 135, 0.1);
-    border-radius: 999px;
-    overflow: hidden;
-    position: relative;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--primary));
-    border-radius: 999px;
-    transition: width .8s cubic-bezier(.22,1,.36,1);
-    box-shadow: 0 0 16px rgba(231, 111, 142, 0.5);
-    position: relative;
-    overflow: hidden;
-  }
-  .progress-fill::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-    animation: shine 2.5s linear infinite;
-  }
-  @keyframes shine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-  .progress-milestones {
-    display: flex; justify-content: space-between;
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-  .progress-milestones span.reached { color: var(--accent); font-weight: 700; }
+/* ===== 关卡地图 ===== */
+.map-container {
+  padding: 24px 16px 100px;
+  position: relative;
+}
+.level-path {
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.level-row {
+  display: flex; justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.level-row.offset-left { padding-left: 0; padding-right: 40%; }
+.level-row.offset-right { padding-right: 0; padding-left: 40%; }
+.level-row.offset-center { padding: 0 20%; }
 
-  /* 古诗网格 */
-  .section-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 18px; font-weight: 700;
-    color: var(--primary);
-    margin: 28px 0 16px;
-  }
-  .section-title .ico { font-size: 22px; }
-  .poem-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 16px;
-  }
-  .poem-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-    backdrop-filter: blur(10px);
-    transition: all .25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .poem-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  }
-  .poem-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-hover);
-  }
-  .poem-card.done {
-    background: linear-gradient(135deg, rgba(168, 216, 160, 0.2), rgba(124, 179, 66, 0.08));
-    border-color: rgba(124, 179, 66, 0.3);
-  }
-  .poem-card.done::before {
-    background: linear-gradient(180deg, var(--success), var(--leaf));
-  }
-  .poem-head {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 12px;
-  }
-  .poem-title { font-size: 18px; font-weight: 700; color: var(--primary); }
-  .poem-author { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-  .poem-status {
-    font-size: 11px; padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(233, 109, 135, 0.1);
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-  .poem-status.done { background: rgba(124, 179, 66, 0.18); color: var(--success); }
-  .poem-status.today { background: rgba(240, 168, 48, 0.18); color: var(--gold); }
-  .poem-text {
-    font-size: 14px; line-height: 1.95;
-    color: var(--text);
-    margin: 10px 0 14px;
-    white-space: pre-line;
-    font-family: "Songti SC", "STSong", "SimSun", serif;
-    opacity: 0.85;
-  }
-  .poem-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn {
-    border: none; cursor: pointer;
-    font-family: inherit; font-weight: 700;
-    border-radius: 12px;
-    padding: 10px 18px;
-    font-size: 14px;
-    transition: all .15s;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .btn:active { transform: translateY(2px); }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--primary));
-    color: white;
-    box-shadow: 0 4px 14px rgba(231, 111, 142, 0.35);
-  }
-  .btn-primary:hover { box-shadow: 0 6px 20px rgba(231, 111, 142, 0.5); }
-  .btn-gold {
-    background: linear-gradient(135deg, #ffd97b, var(--gold));
-    color: #6b4a00;
-    box-shadow: 0 4px 14px rgba(240, 168, 48, 0.35);
-  }
-  .btn-gold:hover { box-shadow: 0 6px 20px rgba(240, 168, 48, 0.5); }
-  .btn-ghost {
-    background: rgba(233, 109, 135, 0.08);
-    color: var(--accent);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover { background: rgba(233, 109, 135, 0.15); }
-  .btn-success {
-    background: linear-gradient(135deg, var(--success-2), var(--success));
-    color: white;
-    box-shadow: 0 4px 14px rgba(124, 179, 66, 0.35);
-  }
-  .btn-danger {
-    background: rgba(229, 115, 115, 0.12);
-    color: var(--danger);
-    border: 1px solid rgba(229, 115, 115, 0.3);
-  }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.level-node {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  background: #fff;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform .15s;
+  box-shadow: 0 4px 0 #e5e5e5;
+  font-weight: 800;
+}
+.level-node:active { transform: translateY(3px); box-shadow: 0 1px 0 #e5e5e5; }
+.level-node .num { font-size: 11px; color: var(--text-ll); }
+.level-node .title { font-size: 12px; color: var(--text); text-align: center; line-height: 1.1; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* 打卡历史 */
-  .history-list { display: flex; flex-direction: column; gap: 10px; }
-  .history-item {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 18px;
-    backdrop-filter: blur(10px);
-    transition: all .2s;
-  }
-  .history-item:hover { background: var(--card-2); transform: translateX(4px); }
-  .history-star { font-size: 24px; filter: drop-shadow(0 0 8px rgba(240,168,48,0.5)); }
-  .history-info { flex: 1; min-width: 0; }
-  .history-poem { font-weight: 700; font-size: 14px; color: var(--primary); }
-  .history-time { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .history-actions { display: flex; gap: 6px; }
-  .history-empty {
-    text-align: center; padding: 50px 20px;
-    color: var(--text-muted); font-size: 14px;
-  }
-  .history-empty .big { font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5; }
+.level-node.done {
+  background: var(--green);
+  border-color: var(--green-d);
+  box-shadow: 0 4px 0 var(--green-d);
+}
+.level-node.done .num, .level-node.done .title { color: #fff; }
+.level-node.done::after {
+  content: '⭐';
+  position: absolute; top: -8px; right: -8px;
+  font-size: 22px;
+  filter: drop-shadow(0 0 4px rgba(255,200,0,0.6));
+}
 
-  /* 弹窗 */
-  .modal-mask {
-    position: fixed; inset: 0;
-    background: rgba(232, 160, 180, 0.35);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: none;
-    align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .modal-mask.show { display: flex; animation: fadeIn .25s; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .modal {
-    background: linear-gradient(160deg, #fff9fb, #fff0f4);
-    border: 1px solid var(--border-strong);
-    border-radius: 24px;
-    padding: 28px;
-    max-width: 560px; width: 100%;
-    max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(233, 109, 135, 0.3);
-    animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
-    position: relative;
-    color: var(--text);
-  }
-  @keyframes popIn {
-    from { transform: scale(0.85); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  .modal-head {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 18px;
-  }
-  .modal-title { font-size: 20px; font-weight: 800; color: var(--primary); }
-  .modal-close {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: rgba(233, 109, 135, 0.12);
-    border: none; color: var(--accent);
-    font-size: 16px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .2s;
-  }
-  .modal-close:hover { background: rgba(233, 109, 135, 0.25); }
+.level-node.current {
+  border-color: var(--gold);
+  background: #fff8e0;
+  box-shadow: 0 4px 0 var(--gold-d);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 0 var(--gold-d), 0 0 0 0 rgba(255,200,0,0.4); }
+  50% { box-shadow: 0 4px 0 var(--gold-d), 0 0 0 12px rgba(255,200,0,0); }
+}
 
-  .poem-detail {
-    background: linear-gradient(135deg, rgba(255, 204, 213, 0.25), rgba(255, 224, 233, 0.15));
-    border: 1px dashed var(--border-strong);
-    border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 18px;
-    text-align: center;
-    position: relative;
-  }
-  .poem-detail::before {
-    content: '❀';
-    position: absolute; top: 8px; left: 12px;
-    color: var(--accent-2); font-size: 16px; opacity: 0.5;
-  }
-  .poem-detail::after {
-    content: '❀';
-    position: absolute; bottom: 8px; right: 12px;
-    color: var(--accent-2); font-size: 16px; opacity: 0.5;
-  }
-  .poem-detail h2 { font-size: 22px; margin-bottom: 6px; color: var(--primary); }
-  .poem-detail .author { color: var(--text-muted); font-size: 14px; margin-bottom: 14px; }
-  .poem-detail .text {
-    font-family: "Songti SC", "STSong", "SimSun", serif;
-    font-size: 17px; line-height: 2.1;
-    white-space: pre-line;
-    color: var(--text);
-  }
+/* 路径连接线 */
+.path-line {
+  width: 4px; height: 24px;
+  background: repeating-linear-gradient(180deg, var(--border) 0 6px, transparent 6px 12px);
+  margin: 0 auto;
+}
 
-  /* 视频录制 */
-  .recorder-wrap {
-    background: #2a2030;
-    border-radius: 14px;
-    overflow: hidden;
-    aspect-ratio: 16/9;
-    position: relative;
-    margin-bottom: 14px;
-  }
-  .recorder-wrap video {
-    width: 100%; height: 100%; object-fit: cover;
-    transform: scaleX(-1);
-  }
-  .recorder-placeholder {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    color: var(--sakura-1);
-    gap: 10px;
-    background: linear-gradient(135deg, #3a2a3a, #2a2030);
-  }
-  .recorder-placeholder .big-ico { font-size: 48px; animation: float 2s ease-in-out infinite; }
-  .rec-timer {
-    position: absolute; top: 12px; right: 12px;
-    background: rgba(229, 115, 115, 0.9);
-    color: white; font-weight: 700;
-    padding: 4px 12px; border-radius: 999px;
-    font-size: 13px;
-    display: none;
-    align-items: center; gap: 6px;
-  }
-  .rec-timer.show { display: flex; }
-  .rec-timer .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: white; animation: blink 1s infinite;
-  }
-  @keyframes blink { 50% { opacity: 0.3; } }
-  .recorder-controls {
-    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
-  }
-  .rec-hint {
-    font-size: 12px; color: var(--text-muted);
-    text-align: center; margin-top: 10px;
-  }
+/* 历史列表 */
+.history-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.history-item {
+  display: flex; align-items: center; gap: 12px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+}
+.history-item:hover { border-color: var(--green); }
+.history-star { font-size: 24px; }
+.history-info { flex: 1; min-width: 0; }
+.history-poem { font-weight: 700; font-size: 14px; }
+.history-time { font-size: 12px; color: var(--text-ll); margin-top: 2px; }
+.history-score { font-size: 12px; font-weight: 700; color: var(--green-d); }
+.btn-play {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: 10px; padding: 6px 12px;
+  font-size: 14px; cursor: pointer; color: var(--blue);
+}
+.btn-play:active { transform: translateY(2px); }
+.history-empty { text-align: center; padding: 60px 20px; color: var(--text-ll); }
+.history-empty .big { font-size: 48px; display: block; margin-bottom: 12px; }
 
-  /* 星星飘落 */
-  .star-burst {
-    position: fixed; inset: 0;
-    pointer-events: none; z-index: 200;
-    overflow: hidden;
-  }
-  .star-burst .star {
-    position: absolute;
-    font-size: 28px;
-    animation: fall 1.6s ease-in forwards;
-    filter: drop-shadow(0 0 10px rgba(240,168,48,0.7));
-  }
-  @keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-  }
+/* 热力图 */
+.heatmap-wrap { padding: 16px; }
+.heatmap {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+}
+.heat-cell {
+  aspect-ratio: 1; border-radius: 8px;
+  background: #f0f0f0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--text-ll);
+}
+.heat-cell.l1 { background: #c6e8a0; }
+.heat-cell.l2 { background: #89e219; }
+.heat-cell.l3 { background: var(--green); color: #fff; }
+.heat-cell.l4 { background: var(--green-d); color: #fff; }
+.heat-cell.today { outline: 2px solid var(--gold); }
 
-  /* 多邻国式鼓励 */
-  .encourage-pop {
-    position: fixed; top: 45%; left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    z-index: 250;
-    pointer-events: none;
-  }
-  .encourage-pop.show {
-    animation: encourageAnim 1.8s cubic-bezier(.34,1.56,.64,1) forwards;
-  }
-  @keyframes encourageAnim {
-    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
-    25% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); opacity: 1; }
-    40% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-    80% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(0.8) translateY(-40px); opacity: 0; }
-  }
-  .encourage-card {
-    background: linear-gradient(135deg, var(--accent), var(--primary));
-    color: white;
-    padding: 24px 44px;
-    border-radius: 24px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(233, 109, 135, 0.5);
-    border: 4px solid rgba(255,255,255,0.4);
-    position: relative;
-  }
-  .encourage-card::before {
-    content: '🌸';
-    position: absolute; top: -18px; left: 50%;
-    transform: translateX(-50%);
-    font-size: 32px;
-  }
-  .encourage-card .emoji { font-size: 52px; display: block; margin-bottom: 8px; }
-  .encourage-card .title { font-size: 26px; font-weight: 800; }
-  .encourage-card .sub { font-size: 14px; opacity: 0.92; margin-top: 4px; }
+/* ===== 弹窗 ===== */
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 100; display: none;
+  align-items: center; justify-content: center; padding: 16px;
+}
+.modal-mask.show { display: flex; animation: fadeIn .2s; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+.modal {
+  background: #fff; border-radius: 20px;
+  max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto;
+  padding: 24px; position: relative;
+  animation: popIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.modal-title { font-size: 20px; font-weight: 800; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--border); background: #fff;
+  font-size: 16px; cursor: pointer; color: var(--text-l);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:active { transform: scale(0.9); }
 
-  /* 奖励弹窗 */
-  .reward-modal {
-    background: linear-gradient(160deg, #fff0f4, #ffe0e9);
-    border: 2px solid var(--accent);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .reward-modal::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(circle at 30% 30%, rgba(231,111,142,0.2), transparent 50%),
-      radial-gradient(circle at 70% 70%, rgba(240,168,48,0.18), transparent 50%);
-    pointer-events: none;
-  }
-  .reward-modal > * { position: relative; z-index: 1; }
-  .reward-trophy {
-    font-size: 88px;
-    animation: trophyBounce 1s ease-in-out infinite;
-    display: inline-block;
-  }
-  @keyframes trophyBounce {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-12px) scale(1.08); }
-  }
-  .reward-title {
-    font-size: 32px; font-weight: 900;
-    background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 12px 0 8px;
-  }
-  .reward-sub {
-    font-size: 18px; color: var(--text);
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
-  .reward-confetti {
-    position: absolute; inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .confetti-piece {
-    position: absolute;
-    width: 10px; height: 10px;
-    animation: confettiFall 3s linear infinite;
-  }
-  @keyframes confettiFall {
-    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
-  }
+/* 打卡弹窗 - 诗名展示（无原文） */
+.poem-info {
+  text-align: center; padding: 20px;
+  background: linear-gradient(135deg, #f0f9ff, #fff8e0);
+  border-radius: 16px; margin-bottom: 16px;
+}
+.poem-info h2 { font-size: 24px; margin-bottom: 6px; color: var(--text); }
+.poem-info .author { color: var(--text-l); font-size: 14px; }
+.poem-info .hint {
+  margin-top: 12px; font-size: 13px; color: var(--orange);
+  font-weight: 600;
+  background: #fff5e6; border-radius: 10px; padding: 8px 12px;
+}
+.hidden-original { display: none; }
 
-  /* 热力图 */
-  .heatmap {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-top: 12px;
-  }
-  .heat-cell {
-    aspect-ratio: 1;
-    border-radius: 6px;
-    background: rgba(233, 109, 135, 0.06);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; color: var(--text-muted);
-    transition: transform .15s;
-  }
-  .heat-cell:hover { transform: scale(1.2); }
-  .heat-cell.l1 { background: rgba(231, 111, 142, 0.25); }
-  .heat-cell.l2 { background: rgba(231, 111, 142, 0.45); }
-  .heat-cell.l3 { background: rgba(231, 111, 142, 0.7); }
-  .heat-cell.l4 { background: var(--accent); color: white; }
-  .heat-cell.today { outline: 2px solid var(--gold); }
+/* 录制区 */
+.recorder-wrap {
+  background: #1a1a2e; border-radius: 16px; overflow: hidden;
+  aspect-ratio: 4/3; position: relative; margin-bottom: 14px;
+}
+.recorder-wrap video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.rec-placeholder {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; color: #aaa; gap: 8px;
+}
+.rec-placeholder .big-ico { font-size: 48px; }
+.rec-timer {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,75,75,0.9); color: #fff; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px; font-size: 13px;
+  display: none; align-items: center; gap: 6px;
+}
+.rec-timer.show { display: flex; }
+.rec-timer .dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: blink 1s infinite; }
+@keyframes blink { 50%{opacity:0.3;} }
+.rec-listening {
+  position: absolute; bottom: 10px; left: 10px;
+  background: rgba(28,176,246,0.9); color: #fff; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px; font-size: 12px;
+  display: none; align-items: center; gap: 6px;
+}
+.rec-listening.show { display: flex; }
+.rec-listening .wave { display: inline-flex; gap: 2px; }
+.rec-listening .wave span { width: 3px; height: 12px; background: #fff; border-radius: 2px; animation: wave 0.8s infinite; }
+.rec-listening .wave span:nth-child(2){animation-delay:.1s;}
+.rec-listening .wave span:nth-child(3){animation-delay:.2s;}
+@keyframes wave { 0%,100%{height:4px;} 50%{height:14px;} }
 
-  .tab-bar {
-    display: flex; gap: 8px; margin-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-  }
-  .tab {
-    padding: 12px 18px;
-    background: none; border: none;
-    color: var(--text-muted);
-    font-family: inherit; font-size: 14px; font-weight: 600;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: color .2s, border-color .2s;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab:hover { color: var(--primary); }
+.recorder-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.rec-hint { font-size: 12px; color: var(--text-ll); text-align: center; margin-top: 10px; }
 
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; animation: fadeIn .3s; }
+/* 按钮 */
+.btn {
+  border: none; cursor: pointer; font-family: inherit; font-weight: 800;
+  border-radius: 12px; padding: 12px 20px; font-size: 14px;
+  transition: transform .1s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:active { transform: translateY(2px); }
+.btn-green { background: var(--green); color: #fff; box-shadow: var(--shadow-btn) var(--green-d); }
+.btn-green:active { box-shadow: none; }
+.btn-blue { background: var(--blue); color: #fff; box-shadow: var(--shadow-btn) var(--blue-d); }
+.btn-blue:active { box-shadow: none; }
+.btn-gold { background: var(--gold); color: #6b4a00; box-shadow: var(--shadow-btn) var(--gold-d); }
+.btn-gold:active { box-shadow: none; }
+.btn-ghost { background: #fff; color: var(--text-l); border: 2px solid var(--border); }
+.btn-red { background: var(--red); color: #fff; box-shadow: var(--shadow-btn) #cc3333; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  @media (max-width: 600px) {
-    .app { padding: 20px 14px 80px; }
-    .brand h1 { font-size: 20px; }
-    .stat-value { font-size: 28px; }
-    .modal { padding: 22px; }
-    .reward-title { font-size: 26px; }
-  }
+/* AI检查结果 */
+.result-section { margin-top: 16px; display: none; }
+.result-section.show { display: block; animation: popIn .3s; }
+.result-score {
+  text-align: center; margin-bottom: 16px;
+}
+.result-score .score-num {
+  font-size: 48px; font-weight: 900;
+}
+.result-score .score-label { font-size: 14px; color: var(--text-l); }
+.result-compare {
+  background: #f9f9f9; border-radius: 12px; padding: 16px;
+  margin-bottom: 12px;
+}
+.result-compare h4 { font-size: 13px; color: var(--text-l); margin-bottom: 8px; }
+.compare-text { font-size: 16px; line-height: 2; font-family: "Songti SC","STSong",serif; }
+.compare-text .correct { color: var(--green-d); }
+.compare-text .wrong { color: var(--red); text-decoration: line-through; font-weight: 700; }
+.compare-text .missing { color: var(--orange); border-bottom: 2px dotted var(--orange); }
+.compare-text .extra { color: var(--text-ll); text-decoration: line-through; }
+.result-note { font-size: 12px; color: var(--text-ll); text-align: center; }
+
+/* 视频回放弹窗 */
+.play-video-wrap { background: #000; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; }
+.play-video-wrap video { width: 100%; height: 100%; object-fit: cover; }
+
+/* 奖励弹窗 */
+.reward-modal { text-align: center; background: linear-gradient(160deg, #fffbe6, #fff8e0); border: 3px solid var(--gold); }
+.reward-trophy { font-size: 80px; animation: bounce 0.8s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+.reward-title { font-size: 30px; font-weight: 900; color: var(--gold-d); margin: 10px 0 8px; }
+.reward-sub { font-size: 17px; color: var(--text); margin-bottom: 20px; line-height: 1.6; }
+.reward-confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.confetti-piece { position: absolute; width: 10px; height: 10px; animation: confettiFall 3s linear infinite; }
+@keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0);opacity:1;} 100%{transform:translateY(500px) rotate(720deg);opacity:0;} }
+
+/* 星星飘落 */
+.star-burst { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
+.star-burst .star { position: absolute; font-size: 28px; animation: fall 1.6s ease-in forwards; filter: drop-shadow(0 0 8px rgba(255,200,0,0.7)); }
+@keyframes fall { 0%{transform:translateY(-50px) rotate(0);opacity:1;} 100%{transform:translateY(100vh) rotate(360deg);opacity:0;} }
+
+/* 鼓励弹窗 */
+.encourage-pop { position: fixed; top: 45%; left: 50%; transform: translate(-50%,-50%) scale(0); z-index: 250; pointer-events: none; }
+.encourage-pop.show { animation: encAnim 1.8s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes encAnim {
+  0%{transform:translate(-50%,-50%) scale(0) rotate(-15deg);opacity:0;}
+  25%{transform:translate(-50%,-50%) scale(1.2) rotate(5deg);opacity:1;}
+  40%{transform:translate(-50%,-50%) scale(1) rotate(0);}
+  80%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(0.8) translateY(-40px);opacity:0;}
+}
+.encourage-card {
+  background: linear-gradient(135deg, var(--green), var(--green-d));
+  color: #fff; padding: 24px 44px; border-radius: 20px; text-align: center;
+  box-shadow: 0 20px 60px rgba(88,204,2,0.4); border: 4px solid rgba(255,255,255,0.4);
+}
+.encourage-card .emoji { font-size: 52px; display: block; margin-bottom: 8px; }
+.encourage-card .title { font-size: 26px; font-weight: 800; }
+.encourage-card .sub { font-size: 14px; opacity: 0.92; margin-top: 4px; }
+
+/* 通知设置弹窗 */
+.notify-settings { text-align: center; }
+.notify-settings p { font-size: 14px; color: var(--text-l); margin-bottom: 16px; line-height: 1.6; }
+.notify-status { font-size: 16px; font-weight: 700; margin-bottom: 16px; padding: 12px; border-radius: 12px; }
+.notify-status.on { background: #e8f5e9; color: var(--green-d); }
+.notify-status.off { background: #fff3e0; color: var(--orange); }
+
+@media (max-width: 600px) {
+  .level-node { width: 68px; height: 68px; }
+  .level-node .title { font-size: 11px; max-width: 56px; }
+  .level-row.offset-left { padding-right: 30%; }
+  .level-row.offset-right { padding-left: 30%; }
+}
 </style>
 </head>
 <body>
 
-<div id="sakura-layer"></div>
-
-<div class="app">
-  <header class="header">
-    <div class="brand">
-      <div class="brand-icon">📜</div>
-      <div>
-        <h1>古诗打卡工作台</h1>
-        <p>🌸 春日集星，每日一首，视频背诵</p>
-      </div>
+<!-- 顶部栏 -->
+<div class="top-bar">
+  <div class="top-left">
+    <div class="stars-display">
+      <span class="star-ico">⭐</span>
+      <span id="starCount">0</span>
+      <span style="font-size:13px;opacity:0.7">/30</span>
     </div>
-    <div class="header-right">
-      <div class="streak-pill">
-        <span class="flame">🔥</span>
-        <span id="streakDays">0</span> 天连击
-      </div>
-      <div class="today-badge">今天是 <span id="todayDate">--</span></div>
+    <div class="streak-display">
+      <span class="flame">🔥</span>
+      <span id="streakDays">0</span>
     </div>
-  </header>
-
-  <section class="stats">
-    <div class="stat-card" style="--glow: rgba(240,168,48,0.15); --deco: '⭐'">
-      <div class="stat-label">⭐ 已获星星</div>
-      <div class="stat-value gold"><span id="starCount">0</span><span class="unit">/ 30</span></div>
-      <div class="stat-sub">集满 30 颗即可放松一下</div>
-    </div>
-    <div class="stat-card" style="--glow: rgba(124,179,66,0.15); --deco: '🌿'">
-      <div class="stat-label">✅ 累计打卡</div>
-      <div class="stat-value green"><span id="totalCheckin">0</span><span class="unit">次</span></div>
-      <div class="stat-sub">坚持就是胜利</div>
-    </div>
-    <div class="stat-card" style="--glow: rgba(231,111,142,0.15); --deco: '🌸'">
-      <div class="stat-label">📅 已背古诗</div>
-      <div class="stat-value pink"><span id="poemDone">0</span><span class="unit">/ <span id="poemTotal">0</span></span></div>
-      <div class="stat-sub">篇目进度</div>
-    </div>
-    <div class="stat-card" style="--glow: rgba(198,72,122,0.15); --deco: '🏆'">
-      <div class="stat-label">🏆 奖励次数</div>
-      <div class="stat-value purple"><span id="rewardCount">0</span><span class="unit">次</span></div>
-      <div class="stat-sub">满 30 星结算一次</div>
-    </div>
-  </section>
-
-  <section class="progress-wrap">
-    <div class="progress-head">
-      <h3>🌟 星星进度</h3>
-      <div class="count">已收集 <b id="progressStar">0</b> / 30 颗</div>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-    </div>
-    <div class="progress-milestones">
-      <span data-ms="5">5</span>
-      <span data-ms="10">10</span>
-      <span data-ms="15">15</span>
-      <span data-ms="20">20</span>
-      <span data-ms="25">25</span>
-      <span data-ms="30">🏆 30</span>
-    </div>
-  </section>
-
-  <div class="tab-bar">
-    <button class="tab active" data-tab="poems">📖 古诗列表</button>
-    <button class="tab" data-tab="history">🕒 打卡历史</button>
-    <button class="tab" data-tab="calendar">📅 打卡日历</button>
   </div>
-
-  <div class="tab-panel active" id="panel-poems">
-    <div class="poem-grid" id="poemGrid"></div>
+  <div class="top-right">
+    <button class="icon-btn" onclick="openNotifySettings()">🔔</button>
   </div>
+</div>
 
-  <div class="tab-panel" id="panel-history">
-    <div class="history-list" id="historyList"></div>
+<!-- 进度条 -->
+<div class="progress-section">
+  <div class="progress-info">
+    <span class="label">🌟 星星进度</span>
+    <span class="count">已收集 <b id="progressStar">0</b> / 30 颗</span>
   </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+</div>
 
-  <div class="tab-panel" id="panel-calendar">
-    <div class="progress-wrap" style="margin-bottom:0;">
-      <div class="progress-head">
-        <h3>📅 近 28 天打卡热力图</h3>
-        <div class="count" style="font-size:12px;">颜色越深打卡越多</div>
-      </div>
-      <div class="heatmap" id="heatmap"></div>
-    </div>
+<!-- 今日提醒 -->
+<div class="daily-banner" id="dailyBanner">
+  <span class="ico">📚</span>
+  <span id="bannerText">今天还没打卡哦，去背一首吧！</span>
+  <button class="btn-go" onclick="scrollToMap()">去打卡</button>
+</div>
+
+<!-- Tab -->
+<div class="tab-bar">
+  <button class="tab active" data-tab="map">🗺️ 关卡地图</button>
+  <button class="tab" data-tab="history">🕒 打卡历史</button>
+  <button class="tab" data-tab="calendar">📅 打卡日历</button>
+</div>
+
+<!-- 关卡地图 -->
+<div class="tab-panel active" id="panel-map">
+  <div class="map-container">
+    <div class="level-path" id="levelPath"></div>
+  </div>
+</div>
+
+<!-- 历史 -->
+<div class="tab-panel" id="panel-history">
+  <div class="history-list" id="historyList"></div>
+</div>
+
+<!-- 日历 -->
+<div class="tab-panel" id="panel-calendar">
+  <div class="heatmap-wrap">
+    <h3 style="font-size:15px;margin-bottom:12px;">近 28 天打卡热力图</h3>
+    <div class="heatmap" id="heatmap"></div>
   </div>
 </div>
 
@@ -768,37 +526,53 @@
 <div class="modal-mask" id="checkinModal">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title">🎬 视频背诵打卡</div>
+      <div class="modal-title">🎬 视频背诵</div>
       <button class="modal-close" onclick="closeCheckin()">✕</button>
     </div>
-    <div class="poem-detail" id="checkinPoem"></div>
+    <div class="poem-info" id="checkinPoemInfo"></div>
+    <div class="hidden-original" id="hiddenOriginal"></div>
     <div class="recorder-wrap">
       <video id="recVideo" autoplay muted playsinline></video>
-      <div class="recorder-placeholder" id="recPlaceholder">
+      <div class="rec-placeholder" id="recPlaceholder">
         <div class="big-ico">📷</div>
         <div>点击下方按钮开启摄像头</div>
       </div>
       <div class="rec-timer" id="recTimer"><span class="dot"></span><span id="recTime">00:00</span></div>
+      <div class="rec-listening" id="recListening"><span>AI识别中</span><span class="wave"><span></span><span></span><span></span></span></div>
     </div>
     <div class="recorder-controls">
       <button class="btn btn-ghost" id="btnStartCam" onclick="startCamera()">📷 开启摄像头</button>
-      <button class="btn btn-primary" id="btnStartRec" onclick="startRecording()" disabled>⏺ 开始录制</button>
-      <button class="btn btn-danger" id="btnStopRec" onclick="stopRecording()" disabled>⏹ 停止</button>
-      <button class="btn btn-gold" id="btnSubmit" onclick="submitCheckin()" disabled>⭐ 提交打卡</button>
+      <button class="btn btn-blue" id="btnStartRec" onclick="startRecording()" disabled>⏺ 开始背诵</button>
+      <button class="btn btn-red" id="btnStopRec" onclick="stopRecording()" disabled>⏹ 完成</button>
     </div>
-    <div class="rec-hint">背诵完成后点击「停止」，预览确认无误后「提交打卡」即可获得 ⭐</div>
+    <div class="rec-hint">背诵时请凭记忆朗读，AI会自动识别你的语音并检查对错</div>
+    <!-- AI检查结果 -->
+    <div class="result-section" id="resultSection">
+      <div class="result-score">
+        <div class="score-num" id="scoreNum">--</div>
+        <div class="score-label">背诵准确率</div>
+      </div>
+      <div class="result-compare">
+        <h4>📖 原文对照</h4>
+        <div class="compare-text" id="compareText"></div>
+      </div>
+      <div class="result-note">AI识别仅供参考，文言文可能有误差</div>
+    </div>
+    <div class="recorder-controls" style="margin-top:14px;" id="submitControls" style="display:none;">
+      <button class="btn btn-green" id="btnSubmit" onclick="submitCheckin()" disabled>⭐ 提交打卡</button>
+    </div>
   </div>
 </div>
 
-<!-- 视频回放弹窗 -->
+<!-- 视频回放 -->
 <div class="modal-mask" id="playModal">
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title" id="playTitle">📹 背诵回放</div>
       <button class="modal-close" onclick="closePlay()">✕</button>
     </div>
-    <div class="recorder-wrap" style="aspect-ratio:16/9;">
-      <video id="playVideo" controls playsinline style="transform:none;"></video>
+    <div class="play-video-wrap">
+      <video id="playVideo" controls playsinline></video>
     </div>
   </div>
 </div>
@@ -810,469 +584,506 @@
     <div class="reward-trophy">🏆</div>
     <div class="reward-title">这么厉害！</div>
     <div class="reward-sub">你已集满 30 颗星星 🌟<br>快让自己放松一会儿吧！🎉</div>
-    <button class="btn btn-gold" onclick="claimReward()" style="padding:14px 32px; font-size:16px;">🎁 领取奖励</button>
+    <button class="btn btn-gold" onclick="claimReward()" style="padding:14px 32px;font-size:16px;">🎁 领取奖励</button>
+  </div>
+</div>
+
+<!-- 通知设置 -->
+<div class="modal-mask" id="notifyModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">🔔 每日提醒</div>
+      <button class="modal-close" onclick="document.getElementById('notifyModal').classList.remove('show')">✕</button>
+    </div>
+    <div class="notify-settings">
+      <p>开启后，每天晚上 8 点会提醒你打卡背古诗</p>
+      <div class="notify-status" id="notifyStatus">--</div>
+      <button class="btn btn-green" id="btnNotify" onclick="toggleNotify()" style="width:100%;">开启提醒</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* ============ 古诗数据：部编版八年级上册语文必背篇目 ============ */
+/* ============ 25篇古诗数据 ============ */
 const POEMS = [
-  { id: 1, title: "三峡", author: "北魏 · 郦道元", text: "自三峡七百里中，两岸连山，略无阙处。重岩叠嶂，隐天蔽日，自非亭午夜分，不见曦月。\n\n至于夏水襄陵，沿溯阻绝。或王命急宣，有时朝发白帝，暮到江陵，其间千二百里，虽乘奔御风，不以疾也。\n\n春冬之时，则素湍绿潭，回清倒影，绝巘多生怪柏，悬泉瀑布，飞漱其间，清荣峻茂，良多趣味。\n\n每至晴初霜旦，林寒涧肃，常有高猿长啸，属引凄异，空谷传响，哀转久绝。故渔者歌曰：\“巴东三峡巫峡长，猿鸣三声泪沾裳。”" },
-  { id: 2, title: "答谢中书书", author: "南朝齐梁 · 陶弘景", text: "山川之美，古来共谈。高峰入云，清流见底。两岸石壁，五色交辉。青林翠竹，四时俱备。晓雾将歇，猿鸟乱鸣；夕日欲颓，沉鳞竞跃。实是欲界之仙都。自康乐以来，未复有能与其奇者。" },
-  { id: 3, title: "记承天寺夜游", author: "宋 · 苏轼", text: "元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。念无与为乐者，遂至承天寺寻张怀民。怀民亦未寝，相与步于中庭。庭下如积水空明，水中藻、荇交横，盖竹柏影也。何夜无月？何处无竹柏？但少闲人如吾两人者耳。" },
-  { id: 4, title: "生于忧患，死于安乐", author: "《孟子》", text: "舜发于畎亩之中，傅说举于版筑之间，胶鬲举于鱼盐之中，管夷吾举于士，孙叔敖举于海，百里奚举于市。故天将降大任于是人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，曾益其所不能。\n\n人恒过，然后能改；困于心，衡于虑，而后作；征于色，发于声，而后喻。入则无法家拂士，出则无敌国外患者，国恒亡。然后知生于忧患而死于安乐也。" },
-  { id: 5, title: "野望", author: "唐 · 王绩", text: "东皋薄暮望，徙倚欲何依。\n树树皆秋色，山山唯落晖。\n牧人驱犊返，猎马带禽归。\n相顾无相识，长歌怀采薇。" },
-  { id: 6, title: "黄鹤楼", author: "唐 · 崔颢", text: "昔人已乘黄鹤去，此地空余黄鹤楼。\n黄鹤一去不复返，白云千载空悠悠。\n晴川历历汉阳树，芳草萋萋鹦鹉洲。\n日暮乡关何处是？烟波江上使人愁。" },
-  { id: 7, title: "使至塞上", author: "唐 · 王维", text: "单车欲问边，属国过居延。\n征蓬出汉塞，归雁入胡天。\n大漠孤烟直，长河落日圆。\n萧关逢候骑，都护在燕然。" },
-  { id: 8, title: "渡荆门送别", author: "唐 · 李白", text: "渡远荆门外，来从楚国游。\n山随平野尽，江入大荒流。\n月下飞天镜，云生结海楼。\n仍怜故乡水，万里送行舟。" },
-  { id: 9, title: "钱塘湖春行", author: "唐 · 白居易", text: "孤山寺北贾亭西，水面初平云脚低。\n几处早莺争暖树，谁家新燕啄春泥。\n乱花渐欲迷人眼，浅草才能没马蹄。\n最爱湖东行不足，绿杨阴里白沙堤。" },
-  { id: 10, title: "庭中有奇树", author: "《古诗十九首》", text: "庭中有奇树，绿叶发华滋。\n攀条折其荣，将以遗所思。\n馨香盈怀袖，路远莫致之。\n此物何足贵？但感别经时。" },
-  { id: 11, title: "龟虽寿", author: "汉 · 曹操", text: "神龟虽寿，犹有竟时。\n腾蛇乘雾，终为土灰。\n老骥伏枥，志在千里。\n烈士暮年，壮心不已。\n盈缩之期，不但在天；\n养怡之福，可得永年。\n幸甚至哉，歌以咏志。" },
-  { id: 12, title: "赠从弟（其二）", author: "汉 · 刘桢", text: "亭亭山上松，瑟瑟谷中风。\n风声一何盛，松枝一何劲。\n冰霜正惨凄，终岁常端正。\n岂不罹凝寒？松柏有本性。" },
-  { id: 13, title: "梁甫行", author: "汉 · 曹植", text: "八方各异气，千里殊风雨。\n剧哉边海民，寄身于草野。\n妻子象禽兽，行止依林阻。\n柴门何萧条，狐兔翔我宇。" }
+  { id:1, title:"三峡", author:"北魏·郦道元", text:"自三峡七百里中，两岸连山，略无阙处。重岩叠嶂，隐天蔽日，自非亭午夜分，不见曦月。\n\n至于夏水襄陵，沿溯阻绝。或王命急宣，有时朝发白帝，暮到江陵，其间千二百里，虽乘奔御风，不以疾也。\n\n春冬之时，则素湍绿潭，回清倒影，绝巘多生怪柏，悬泉瀑布，飞漱其间，清荣峻茂，良多趣味。\n\n每至晴初霜旦，林寒涧肃，常有高猿长啸，属引凄异，空谷传响，哀转久绝。故渔者歌曰：\u201c巴东三峡巫峡长，猿鸣三声泪沾裳。\u201d" },
+  { id:2, title:"答谢中书书", author:"南朝·陶弘景", text:"山川之美，古来共谈。高峰入云，清流见底。两岸石壁，五色交辉。青林翠竹，四时俱备。晓雾将歇，猿鸟乱鸣；夕日欲颓，沉鳞竞跃。实是欲界之仙都。自康乐以来，未复有能与其奇者。" },
+  { id:3, title:"记承天寺夜游", author:"宋·苏轼", text:"元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。念无与为乐者，遂至承天寺寻张怀民。怀民亦未寝，相与步于中庭。庭下如积水空明，水中藻、荇交横，盖竹柏影也。何夜无月？何处无竹柏？但少闲人如吾两人者耳。" },
+  { id:4, title:"与朱元思书", author:"南朝·吴均", text:"风烟俱净，天山共色。从流飘荡，任意东西。自富阳至桐庐一百许里，奇山异水，天下独绝。\n\n水皆缥碧，千丈见底。游鱼细石，直视无碍。急湍甚箭，猛浪若奔。\n\n夹岸高山，皆生寒树，负势竞上，互相轩邈，争高直指，千百成峰。泉水激石，泠泠作响；好鸟相鸣，嘤嘤成韵。蝉则千转不穷，猿则百叫无绝。鸢飞戾天者，望峰息心；经纶世务者，窥谷忘反。横柯上蔽，在昼犹昏；疏条交映，有时见日。" },
+  { id:5, title:"野望", author:"唐·王绩", text:"东皋薄暮望，徙倚欲何依。\n树树皆秋色，山山唯落晖。\n牧人驱犊返，猎马带禽归。\n相顾无相识，长歌怀采薇。" },
+  { id:6, title:"黄鹤楼", author:"唐·崔颢", text:"昔人已乘黄鹤去，此地空余黄鹤楼。\n黄鹤一去不复返，白云千载空悠悠。\n晴川历历汉阳树，芳草萋萋鹦鹉洲。\n日暮乡关何处是？烟波江上使人愁。" },
+  { id:7, title:"使至塞上", author:"唐·王维", text:"单车欲问边，属国过居延。\n征蓬出汉塞，归雁入胡天。\n大漠孤烟直，长河落日圆。\n萧关逢候骑，都护在燕然。" },
+  { id:8, title:"渡荆门送别", author:"唐·李白", text:"渡远荆门外，来从楚国游。\n山随平野尽，江入大荒流。\n月下飞天镜，云生结海楼。\n仍怜故乡水，万里送行舟。" },
+  { id:9, title:"钱塘湖春行", author:"唐·白居易", text:"孤山寺北贾亭西，水面初平云脚低。\n几处早莺争暖树，谁家新燕啄春泥。\n乱花渐欲迷人眼，浅草才能没马蹄。\n最爱湖东行不足，绿杨阴里白沙堤。" },
+  { id:10, title:"庭中有奇树", author:"《古诗十九首》", text:"庭中有奇树，绿叶发华滋。\n攀条折其荣，将以遗所思。\n馨香盈怀袖，路远莫致之。\n此物何足贵？但感别经时。" },
+  { id:11, title:"龟虽寿", author:"汉·曹操", text:"神龟虽寿，犹有竟时。\n腾蛇乘雾，终为土灰。\n老骥伏枥，志在千里。\n烈士暮年，壮心不已。\n盈缩之期，不但在天；\n养怡之福，可得永年。\n幸甚至哉，歌以咏志。" },
+  { id:12, title:"赠从弟（其二）", author:"汉·刘桢", text:"亭亭山上松，瑟瑟谷中风。\n风声一何盛，松枝一何劲。\n冰霜正惨凄，终岁常端正。\n岂不罹凝寒？松柏有本性。" },
+  { id:13, title:"梁甫行", author:"汉·曹植", text:"八方各异气，千里殊风雨。\n剧哉边海民，寄身于草野。\n妻子象禽兽，行止依林阻。\n柴门何萧条，狐兔翔我宇。" },
+  { id:14, title:"白杨礼赞（节选）", author:"茅盾", text:"这就是白杨树，西北极普通的一种树，然而决不是平凡的树！\n\n它没有婆娑的姿态，没有屈曲盘旋的虬枝，也许你要说它不美丽，——如果美是专指"婆娑"或"旁斜逸出"之类而言，那么白杨树算不得树中的好女子；但是它却是伟岸，正直，朴质，严肃，也不缺乏温和，更不用提它的坚强不屈与挺拔，它是树中的伟丈夫！\n\n白杨不是平凡的树。它在西北极普遍，不被人重视，就跟北方农民相似；它有极强的生命力，磨折不了，压迫不倒，也跟北方的农民相似。我赞美白杨树，就因为它不但象征了北方的农民，尤其象征了今天我们民族解放斗争中所不可缺的朴质，坚强，以及力求上进的精神。" },
+  { id:15, title:"得道多助，失道寡助", author:"《孟子》", text:"天时不如地利，地利不如人和。三里之城，七里之郭，环而攻之而不胜。夫环而攻之，必有得天时者矣，然而不胜者，是天时不如地利也。城非不高也，池非不深也，兵革非不坚利也，米粟非不多也，委而去之，是地利不如人和也。故曰：域民不以封疆之界，固国不以山溪之险，威天下不以兵革之利。得道者多助，失道者寡助。寡助之至，亲戚畔之；多助之至，天下顺之。以天下之所顺，攻亲戚之所畔，故君子有不战，战必胜矣。" },
+  { id:16, title:"生于忧患，死于安乐", author:"《孟子》", text:"舜发于畎亩之中，傅说举于版筑之间，胶鬲举于鱼盐之中，管夷吾举于士，孙叔敖举于海，百里奚举于市。故天将降大任于是人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，曾益其所不能。\n\n人恒过，然后能改；困于心，衡于虑，而后作；征于色，发于声，而后喻。入则无法家拂士，出则无敌国外患者，国恒亡。然后知生于忧患而死于安乐也。" },
+  { id:17, title:"饮酒（其五）", author:"东晋·陶渊明", text:"结庐在人境，而无车马喧。\n问君何能尔？心远地自偏。\n采菊东篱下，悠然见南山。\n山气日夕佳，飞鸟相与还。\n此中有真意，欲辨已忘言。" },
+  { id:18, title:"春望", author:"唐·杜甫", text:"国破山河在，城春草木深。\n感时花溅泪，恨别鸟惊心。\n烽火连三月，家书抵万金。\n白头搔更短，浑欲不胜簪。" },
+  { id:19, title:"雁门太守行", author:"唐·李贺", text:"黑云压城城欲摧，甲光向日金鳞开。\n角声满天秋色里，塞上燕脂凝夜紫。\n半卷红旗临易水，霜重鼓寒声不起。\n报君黄金台上意，提携玉龙为君死。" },
+  { id:20, title:"赤壁", author:"唐·杜牧", text:"折戟沉沙铁未销，自将磨洗认前朝。\n东风不与周郎便，铜雀春深锁二乔。" },
+  { id:21, title:"渔家傲", author:"宋·李清照", text:"天接云涛连晓雾，星河欲转千帆舞。仿佛梦魂归帝所。闻天语，殷勤问我归何处。\n我报路长嗟日暮，学诗谩有惊人句。九万里风鹏正举。风休住，蓬舟吹取三山去！" },
+  { id:22, title:"浣溪沙", author:"宋·晏殊", text:"一曲新词酒一杯，去年天气旧亭台。夕阳西下几时回？\n无可奈何花落去，似曾相识燕归来。小园香径独徘徊。" },
+  { id:23, title:"采桑子", author:"宋·欧阳修", text:"轻舟短棹西湖好，绿水逶迤。芳草长堤，隐隐笙歌处处随。\n无风水面琉璃滑，不觉船移。微动涟漪，惊起沙禽掠岸飞。" },
+  { id:24, title:"相见欢", author:"宋·朱敦儒", text:"金陵城上西楼，倚清秋。万里夕阳垂地大江流。\n中原乱，簪缨散，几时收？试倩悲风吹泪过扬州。" },
+  { id:25, title:"如梦令", author:"宋·李清照", text:"常记溪亭日暮，沉醉不知归路。兴尽晚回舟，误入藕花深处。争渡，争渡，惊起一滩鸥鹭。" }
 ];
 
 /* ============ 数据存储 ============ */
-const STORE_KEY = 'poetry_checkin_v1';
+const STORE_KEY = 'poetry_checkin_v2';
 function loadStore() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return { stars: 0, totalStars: 0, history: [], rewardCount: 0, lastCheckinDate: null, streak: 0 };
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch(e) {}
+  return { stars:0, totalStars:0, history:[], rewardCount:0, notifyEnabled:false, notifyHour:20 };
 }
 function saveStore(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
 let store = loadStore();
 
-/* 视频单独存 IndexedDB */
-const DB_NAME = 'poetry_videos';
-const STORE_V = 'videos';
-function openVideoDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_V)) db.createObjectStore(STORE_V, { keyPath: 'id' });
-    };
-    req.onsuccess = e => resolve(e.target.result);
-    req.onerror = e => reject(e);
-  });
-}
-async function saveVideo(id, blob) {
-  const db = await openVideoDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_V, 'readwrite');
-    tx.objectStore(STORE_V).put({ id, blob });
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-async function getVideo(id) {
-  const db = await openVideoDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_V, 'readonly');
-    const req = tx.objectStore(STORE_V).get(id);
-    req.onsuccess = () => resolve(req.result ? req.result.blob : null);
-    req.onerror = () => reject(req.error);
-  });
-}
+/* IndexedDB 视频 */
+const DB_NAME='poetry_videos', STORE_V='videos';
+function openVideoDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains(STORE_V))db.createObjectStore(STORE_V,{keyPath:'id'});};r.onsuccess=e=>res(e.target.result);r.onerror=e=>rej(e);});}
+async function saveVideo(id,blob){const db=await openVideoDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_V,'readwrite');tx.objectStore(STORE_V).put({id,blob});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+async function getVideo(id){const db=await openVideoDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_V,'readonly');const r=tx.objectStore(STORE_V).get(id);r.onsuccess=()=>res(r.result?r.result.blob:null);r.onerror=()=>rej(r.error);});}
 
 /* ============ 工具 ============ */
-function todayStr() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function fmtDateTime(ts) {
-  const d = new Date(ts);
-  return `${d.getMonth()+1}月${d.getDate()}日 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-}
-function getStreak() {
-  if (store.history.length === 0) return 0;
-  const days = [...new Set(store.history.map(h => h.date))].sort().reverse();
-  if (days.length === 0) return 0;
-  let streak = 0;
-  const today = new Date();
-  for (let i = 0; i < 400; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    if (days.includes(ds)) streak++;
-    else if (i === 0) continue;
-    else break;
-  }
-  return streak;
-}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function fmtDateTime(ts){const d=new Date(ts);return`${d.getMonth()+1}月${d.getDate()}日 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function getStreak(){if(store.history.length===0)return 0;const days=[...new Set(store.history.map(h=>h.date))].sort().reverse();if(days.length===0)return 0;let s=0;const t=new Date();for(let i=0;i<400;i++){const d=new Date(t);d.setDate(d.getDate()-i);const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;if(days.includes(ds))s++;else if(i===0)continue;else break;}return s;}
 
 /* ============ 渲染 ============ */
-function render() {
-  const d = new Date();
-  document.getElementById('todayDate').textContent = `${d.getMonth()+1}月${d.getDate()}日`;
-  document.getElementById('streakDays').textContent = getStreak();
+function render(){
+  const stars=store.stars;
+  document.getElementById('starCount').textContent=stars;
+  document.getElementById('progressStar').textContent=stars;
+  document.getElementById('streakDays').textContent=getStreak();
+  const pct=Math.min(100,(stars/30)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  const doneIds=[...new Set(store.history.map(h=>h.poemId))];
+  document.getElementById('rewardCount')&&(document.getElementById('rewardCount').textContent=store.rewardCount);
 
-  const stars = store.stars;
-  document.getElementById('starCount').textContent = stars;
-  document.getElementById('progressStar').textContent = stars;
-  document.getElementById('totalCheckin').textContent = store.history.length;
-  document.getElementById('rewardCount').textContent = store.rewardCount;
-  const doneIds = [...new Set(store.history.map(h => h.poemId))];
-  document.getElementById('poemDone').textContent = doneIds.length;
-  document.getElementById('poemTotal').textContent = POEMS.length;
-
-  const pct = Math.min(100, (stars / 30) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.querySelectorAll('.progress-milestones span').forEach(s => {
-    const ms = parseInt(s.dataset.ms);
-    s.classList.toggle('reached', stars >= ms);
+  // 关卡地图
+  const path=document.getElementById('levelPath');
+  const offsets=['offset-center','offset-left','offset-right','offset-center','offset-right','offset-left'];
+  let html='';
+  POEMS.forEach((p,i)=>{
+    const done=doneIds.includes(p.id);
+    const cls=done?'done':'';
+    html+=`<div class="level-row ${offsets[i%offsets.length]}">
+      <div class="level-node ${cls}" onclick="openCheckin(${p.id})">
+        <span class="num">第${i+1}关</span>
+        <span class="title">${p.title.length>5?p.title.slice(0,4)+'…':p.title}</span>
+      </div>
+    </div>`;
+    if(i<POEMS.length-1) html+='<div class="path-line"></div>';
   });
+  path.innerHTML=html;
 
-  const grid = document.getElementById('poemGrid');
-  const todayPoem = store.history.find(h => h.date === todayStr());
-  grid.innerHTML = POEMS.map(p => {
-    const done = doneIds.includes(p.id);
-    const isToday = todayPoem && todayPoem.poemId === p.id;
-    let statusCls = '', statusTxt = '未打卡';
-    if (isToday) { statusCls = 'today'; statusTxt = '今日已打'; }
-    else if (done) { statusCls = 'done'; statusTxt = '已完成'; }
-    return `
-      <div class="poem-card ${done ? 'done' : ''}">
-        <div class="poem-head">
-          <div>
-            <div class="poem-title">${p.title}</div>
-            <div class="poem-author">${p.author}</div>
-          </div>
-          <div class="poem-status ${statusCls}">${statusTxt}</div>
-        </div>
-        <div class="poem-text">${p.text}</div>
-        <div class="poem-actions">
-          <button class="btn btn-gold" onclick="openCheckin(${p.id})">🎬 打卡背诵</button>
-          ${done ? `<button class="btn btn-ghost" onclick="playVideo(${p.id})">▶ 回看</button>` : ''}
-        </div>
-      </div>`;
-  }).join('');
-
-  const hl = document.getElementById('historyList');
-  if (store.history.length === 0) {
-    hl.innerHTML = '<div class="history-empty"><span class="big">🌸</span>还没有打卡记录，快去背一首吧～</div>';
+  // 历史
+  const hl=document.getElementById('historyList');
+  if(store.history.length===0){
+    hl.innerHTML='<div class="history-empty"><span class="big">🗺️</span>还没有打卡记录<br>点击关卡开始背诵吧！</div>';
   } else {
-    hl.innerHTML = store.history.slice().reverse().map(h => {
-      const p = POEMS.find(x => x.id === h.poemId);
-      return `
-        <div class="history-item">
-          <div class="history-star">⭐</div>
-          <div class="history-info">
-            <div class="history-poem">${p ? p.title : '未知'} · ${p ? p.author : ''}</div>
-            <div class="history-time">${fmtDateTime(h.ts)}</div>
-          </div>
-          <div class="history-actions">
-            <button class="btn btn-ghost" onclick="playVideo(${h.poemId})">▶</button>
-          </div>
-        </div>`;
+    hl.innerHTML=store.history.slice().reverse().map(h=>{
+      const p=POEMS.find(x=>x.id===h.poemId);
+      const score=h.score!=null?`<span class="history-score">${h.score}分</span>`:'';
+      return `<div class="history-item">
+        <div class="history-star">⭐</div>
+        <div class="history-info">
+          <div class="history-poem">${p?p.title:'未知'} · ${p?p.author:''}</div>
+          <div class="history-time">${fmtDateTime(h.ts)} ${score}</div>
+        </div>
+        <button class="btn-play" onclick="playVideo(${h.poemId})">▶</button>
+      </div>`;
     }).join('');
   }
 
   renderHeatmap();
+  checkDailyBanner();
 }
 
-function renderHeatmap() {
-  const wrap = document.getElementById('heatmap');
-  const today = new Date();
-  const dayCount = {};
-  store.history.forEach(h => { dayCount[h.date] = (dayCount[h.date] || 0) + 1; });
-  const cells = [];
-  for (let i = 27; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const c = dayCount[ds] || 0;
-    let cls = '';
-    if (c >= 4) cls = 'l4';
-    else if (c === 3) cls = 'l3';
-    else if (c === 2) cls = 'l2';
-    else if (c === 1) cls = 'l1';
-    if (ds === todayStr()) cls += ' today';
-    cells.push(`<div class="heat-cell ${cls}" title="${ds}: ${c}次">${d.getDate()}</div>`);
+function renderHeatmap(){
+  const wrap=document.getElementById('heatmap');
+  const today=new Date();
+  const dc={};store.history.forEach(h=>{dc[h.date]=(dc[h.date]||0)+1;});
+  let cells='';
+  for(let i=27;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const c=dc[ds]||0;let cls='';
+    if(c>=4)cls='l4';else if(c===3)cls='l3';else if(c===2)cls='l2';else if(c===1)cls='l1';
+    if(ds===todayStr())cls+=' today';
+    cells+=`<div class="heat-cell ${cls}" title="${ds}:${c}次">${d.getDate()}</div>`;
   }
-  wrap.innerHTML = cells.join('');
+  wrap.innerHTML=cells;
 }
 
-/* ============ Tab 切换 ============ */
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+function checkDailyBanner(){
+  const todayDone=store.history.some(h=>h.date===todayStr());
+  const banner=document.getElementById('dailyBanner');
+  if(!todayDone){
+    banner.classList.add('show');
+    document.getElementById('bannerText').textContent='今天还没打卡哦，去背一首吧！';
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function scrollToMap(){
+  document.querySelector('.tab[data-tab="map"]').click();
+  document.getElementById('panel-map').scrollIntoView({behavior:'smooth'});
+}
+
+/* Tab */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
-    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
   });
 });
 
 /* ============ 打卡流程 ============ */
-let currentPoem = null;
-let mediaStream = null;
-let mediaRecorder = null;
-let recChunks = [];
-let recBlob = null;
-let recTimerInterval = null;
-let recStartTime = 0;
+let currentPoem=null,mediaStream=null,mediaRecorder=null,recChunks=[],recBlob=null;
+let recTimerInterval=null,recStartTime=0;
+let recognition=null,recognizedText='';
 
-function openCheckin(poemId) {
-  currentPoem = POEMS.find(p => p.id === poemId);
-  document.getElementById('checkinPoem').innerHTML = `
+function openCheckin(poemId){
+  currentPoem=POEMS.find(p=>p.id===poemId);
+  // 只显示诗名和作者，不显示原文
+  document.getElementById('checkinPoemInfo').innerHTML=`
     <h2>${currentPoem.title}</h2>
     <div class="author">${currentPoem.author}</div>
-    <div class="text">${currentPoem.text}</div>
+    <div class="hint">⚠️ 请凭记忆背诵，不要看原文哦！</div>
   `;
+  document.getElementById('hiddenOriginal').textContent=currentPoem.text;
+  document.getElementById('resultSection').classList.remove('show');
+  document.getElementById('submitControls').style.display='none';
   resetRecorder();
   document.getElementById('checkinModal').classList.add('show');
 }
-function closeCheckin() {
+function closeCheckin(){
   document.getElementById('checkinModal').classList.remove('show');
-  stopCamera();
-  resetRecorder();
+  stopCamera();resetRecorder();stopRecognition();
 }
-function resetRecorder() {
-  recBlob = null;
-  recChunks = [];
-  const v = document.getElementById('recVideo');
-  v.srcObject = null;
-  v.src = '';
-  v.controls = false;
-  v.muted = true;
-  document.getElementById('recPlaceholder').style.display = 'flex';
-  document.getElementById('btnStartRec').disabled = true;
-  document.getElementById('btnStopRec').disabled = true;
-  document.getElementById('btnSubmit').disabled = true;
+function resetRecorder(){
+  recBlob=null;recChunks=[];recognizedText='';
+  const v=document.getElementById('recVideo');v.srcObject=null;v.src='';v.controls=false;v.muted=true;
+  document.getElementById('recPlaceholder').style.display='flex';
+  document.getElementById('btnStartRec').disabled=true;
+  document.getElementById('btnStopRec').disabled=true;
+  document.getElementById('btnSubmit').disabled=true;
+  document.getElementById('submitControls').style.display='none';
   document.getElementById('recTimer').classList.remove('show');
-  if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
+  document.getElementById('recListening').classList.remove('show');
+  document.getElementById('resultSection').classList.remove('show');
+  if(recTimerInterval){clearInterval(recTimerInterval);recTimerInterval=null;}
 }
 
-async function startCamera() {
-  try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: true });
-    document.getElementById('recVideo').srcObject = mediaStream;
-    document.getElementById('recPlaceholder').style.display = 'none';
-    document.getElementById('btnStartRec').disabled = false;
-  } catch (e) {
-    alert('无法访问摄像头/麦克风：' + e.message + '\n请确认浏览器已授权，且使用 https 或 localhost 访问。');
+async function startCamera(){
+  try{
+    mediaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
+    document.getElementById('recVideo').srcObject=mediaStream;
+    document.getElementById('recPlaceholder').style.display='none';
+    document.getElementById('btnStartRec').disabled=false;
+  }catch(e){
+    alert('无法访问摄像头/麦克风：'+e.message+'\n请确认浏览器已授权，且使用 https 或 localhost 访问。');
   }
 }
-function stopCamera() {
-  if (mediaStream) {
-    mediaStream.getTracks().forEach(t => t.stop());
-    mediaStream = null;
-  }
+function stopCamera(){if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}}
+
+/* 语音识别 */
+function initRecognition(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR) return null;
+  const r=new SR();
+  r.lang='zh-CN';
+  r.continuous=true;
+  r.interimResults=true;
+  r.onresult=e=>{
+    let final='',interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) final+=e.results[i][0].transcript;
+      else interim+=e.results[i][0].transcript;
+    }
+    recognizedText+=final;
+  };
+  r.onerror=e=>{ console.warn('语音识别错误:',e.error); };
+  return r;
+}
+function startRecognition(){
+  const r=initRecognition();
+  if(!r){ console.warn('浏览器不支持语音识别'); return false; }
+  recognition=r;
+  recognizedText='';
+  try{ r.start(); return true; }catch(e){ console.warn(e); return false; }
+}
+function stopRecognition(){
+  if(recognition){ try{ recognition.stop(); }catch(e){} recognition=null; }
 }
 
-function startRecording() {
-  if (!mediaStream) return;
-  recChunks = [];
-  const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
-             : MediaRecorder.isTypeSupported('video/webm;codecs=vp8') ? 'video/webm;codecs=vp8'
-             : 'video/webm';
-  try {
-    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: mime });
-  } catch (e) {
-    mediaRecorder = new MediaRecorder(mediaStream);
-  }
-  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
-  mediaRecorder.onstop = () => {
-    recBlob = new Blob(recChunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(recBlob);
-    const v = document.getElementById('recVideo');
-    v.srcObject = null;
-    v.src = url;
-    v.muted = false;
-    v.controls = true;
-    document.getElementById('btnSubmit').disabled = false;
+function startRecording(){
+  if(!mediaStream) return;
+  recChunks=[];
+  const mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':MediaRecorder.isTypeSupported('video/webm;codecs=vp8')?'video/webm;codecs=vp8':'video/webm';
+  try{ mediaRecorder=new MediaRecorder(mediaStream,{mimeType:mime}); }catch(e){ mediaRecorder=new MediaRecorder(mediaStream); }
+  mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data);};
+  mediaRecorder.onstop=()=>{
+    recBlob=new Blob(recChunks,{type:'video/webm'});
+    const url=URL.createObjectURL(recBlob);
+    const v=document.getElementById('recVideo');
+    v.srcObject=null;v.src=url;v.muted=false;v.controls=true;
+    // AI检查
+    doAICheck();
   };
   mediaRecorder.start();
-  recStartTime = Date.now();
+  recStartTime=Date.now();
   document.getElementById('recTimer').classList.add('show');
-  document.getElementById('btnStartRec').disabled = true;
-  document.getElementById('btnStopRec').disabled = false;
-  recTimerInterval = setInterval(() => {
-    const s = Math.floor((Date.now() - recStartTime) / 1000);
-    document.getElementById('recTime').textContent =
-      `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
-  }, 200);
+  document.getElementById('btnStartRec').disabled=true;
+  document.getElementById('btnStopRec').disabled=false;
+  // 同步启动语音识别
+  const ok=startRecognition();
+  if(ok) document.getElementById('recListening').classList.add('show');
+  recTimerInterval=setInterval(()=>{
+    const s=Math.floor((Date.now()-recStartTime)/1000);
+    document.getElementById('recTime').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  },200);
 }
 
-function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-    mediaRecorder.stop();
-  }
-  if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
+function stopRecording(){
+  if(mediaRecorder&&mediaRecorder.state!=='inactive') mediaRecorder.stop();
+  if(recTimerInterval){clearInterval(recTimerInterval);recTimerInterval=null;}
   document.getElementById('recTimer').classList.remove('show');
-  document.getElementById('btnStopRec').disabled = true;
-  document.getElementById('btnStartRec').disabled = false;
+  document.getElementById('recListening').classList.remove('show');
+  document.getElementById('btnStopRec').disabled=true;
+  document.getElementById('btnStartRec').disabled=false;
   stopCamera();
+  stopRecognition();
+  // 延迟一下等识别结果返回
+  setTimeout(()=>{ if(recognizedText===''){ doAICheck(); } },500);
 }
 
-async function submitCheckin() {
-  if (!recBlob || !currentPoem) return;
-  const videoId = `v_${currentPoem.id}_${Date.now()}`;
-  try { await saveVideo(videoId, recBlob); } catch(e) { console.warn('视频保存失败', e); }
+/* ============ AI 文字对比 ============ */
+function cleanText(s){
+  return s.replace(/[^\u4e00-\u9fa5]/g,'');
+}
 
-  const now = new Date();
-  const record = {
-    poemId: currentPoem.id,
-    poemTitle: currentPoem.title,
-    ts: now.getTime(),
-    date: todayStr(),
-    videoId
+function compareText(original,recognized){
+  const orig=cleanText(original);
+  const rec=cleanText(recognized);
+  if(rec.length===0) return {score:0,html:'<span class="missing">未识别到语音内容</span>',recHtml:''};
+
+  // LCS 动态规划对齐
+  const m=orig.length,n=rec.length;
+  const dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      if(orig[i-1]===rec[j-1]) dp[i][j]=dp[i-1][j-1]+1;
+      else dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+    }
+  }
+
+  // 回溯找出对齐路径
+  let i=m,j=n;
+  const origParts=[],recParts=[];
+  while(i>0&&j>0){
+    if(orig[i-1]===rec[j-1]){
+      origParts.unshift({ch:orig[i-1],type:'correct'});
+      recParts.unshift({ch:rec[j-1],type:'correct'});
+      i--;j--;
+    } else if(dp[i-1][j]>=dp[i][j-1]){
+      origParts.unshift({ch:orig[i-1],type:'missing'});
+      i--;
+    } else {
+      recParts.unshift({ch:rec[j-1],type:'extra'});
+      j--;
+    }
+  }
+  while(i>0){ origParts.unshift({ch:orig[i-1],type:'missing'}); i--; }
+  while(j>0){ recParts.unshift({ch:rec[j-1],type:'extra'}); j--; }
+
+  // 生成HTML
+  let html='',recHtml='';
+  origParts.forEach(p=>{
+    if(p.type==='correct') html+=`<span class="correct">${p.ch}</span>`;
+    else if(p.type==='missing') html+=`<span class="missing">${p.ch}</span>`;
+  });
+  recParts.forEach(p=>{
+    if(p.type==='correct') recHtml+=`<span class="correct">${p.ch}</span>`;
+    else if(p.type==='extra') recHtml+=`<span class="extra">${p.ch}</span>`;
+  });
+
+  // 合并相邻同类型
+  const correctCount=origParts.filter(p=>p.type==='correct').length;
+  const score=Math.round((correctCount/orig.length)*100);
+  return {score,html,recHtml};
+}
+
+function doAICheck(){
+  const original=document.getElementById('hiddenOriginal').textContent;
+  const result=compareText(original,recognizedText);
+  document.getElementById('scoreNum').textContent=result.score;
+  document.getElementById('scoreNum').style.color=result.score>=80?'var(--green-d)':result.score>=60?'var(--orange)':'var(--red)';
+  let compareHtml=result.html;
+  if(result.recHtml){
+    compareHtml+=`<div style="margin-top:12px;font-size:13px;color:var(--text-l);">你背的：</div><div style="font-size:16px;line-height:2;">${result.recHtml}</div>`;
+  }
+  document.getElementById('compareText').innerHTML=compareHtml;
+  document.getElementById('resultSection').classList.add('show');
+  document.getElementById('submitControls').style.display='flex';
+  document.getElementById('btnSubmit').disabled=false;
+  document.getElementById('btnSubmit').textContent=`⭐ 提交打卡 (${result.score}分)`;
+}
+
+async function submitCheckin(){
+  if(!recBlob||!currentPoem) return;
+  const videoId=`v_${currentPoem.id}_${Date.now()}`;
+  try{ await saveVideo(videoId,recBlob); }catch(e){ console.warn(e); }
+
+  const original=document.getElementById('hiddenOriginal').textContent;
+  const result=compareText(original,recognizedText);
+
+  const record={
+    poemId:currentPoem.id,
+    poemTitle:currentPoem.title,
+    ts:Date.now(),
+    date:todayStr(),
+    videoId,
+    score:result.score
   };
   store.history.push(record);
-  store.stars += 1;
-  store.totalStars += 1;
+  store.stars+=1;store.totalStars+=1;
   saveStore(store);
-
-  closeCheckin();
-  render();
-
+  closeCheckin();render();
   starBurst();
 
-  const msgs = [
-    { e: '🎉', t: '太棒了！', s: '又收获一颗星星 ⭐' },
-    { e: '🌸', t: '春暖花开！', s: '你背得真好听' },
-    { e: '🔥', t: '连击中！', s: '保持节奏，继续加油' },
-    { e: '✨', t: '完美背诵！', s: '你真是个小诗人' },
-    { e: '🌷', t: '厉害！', s: '古诗达人就是你' },
-    { e: '💪', t: '加油！', s: '坚持就是胜利' },
-    { e: '🌟', t: '闪耀！', s: '星星正在向你聚集' },
-    { e: '🍃', t: '清新！', s: '字字句句都动人' }
+  const msgs=[
+    {e:'🎉',t:'太棒了！',s:'又收获一颗星星 ⭐'},
+    {e:'🔥',t:'连击中！',s:'保持节奏，继续加油'},
+    {e:'✨',t:'完美背诵！',s:'你真是个小诗人'},
+    {e:'👏',t:'厉害！',s:'古诗达人就是你'},
+    {e:'💪',t:'加油！',s:'坚持就是胜利'},
+    {e:'🌟',t:'闪耀！',s:'星星正在向你聚集'}
   ];
-  const m = msgs[Math.floor(Math.random() * msgs.length)];
-  showEncourage(m.e, m.t, m.s);
+  const m=msgs[Math.floor(Math.random()*msgs.length)];
+  showEncourage(m.e,m.t,m.s);
 
-  if (store.stars >= 30) {
-    setTimeout(() => triggerReward(), 1500);
-  }
+  if(store.stars>=30) setTimeout(()=>triggerReward(),1500);
 }
 
 /* ============ 视频回放 ============ */
-async function playVideo(poemId) {
-  const rec = store.history.slice().reverse().find(h => h.poemId === poemId);
-  if (!rec || !rec.videoId) { alert('暂无视频'); return; }
-  const blob = await getVideo(rec.videoId);
-  if (!blob) { alert('视频已丢失'); return; }
-  const p = POEMS.find(x => x.id === poemId);
-  document.getElementById('playTitle').textContent = `📹 ${p.title} · 背诵回放`;
-  const v = document.getElementById('playVideo');
-  v.src = URL.createObjectURL(blob);
+async function playVideo(poemId){
+  const rec=store.history.slice().reverse().find(h=>h.poemId===poemId);
+  if(!rec||!rec.videoId){alert('暂无视频');return;}
+  const blob=await getVideo(rec.videoId);
+  if(!blob){alert('视频已丢失');return;}
+  const p=POEMS.find(x=>x.id===poemId);
+  document.getElementById('playTitle').textContent=`📹 ${p.title} · 背诵回放`;
+  const v=document.getElementById('playVideo');
+  v.src=URL.createObjectURL(blob);
   document.getElementById('playModal').classList.add('show');
 }
-function closePlay() {
-  const v = document.getElementById('playVideo');
-  v.pause(); v.src = '';
+function closePlay(){
+  const v=document.getElementById('playVideo');v.pause();v.src='';
   document.getElementById('playModal').classList.remove('show');
 }
 
 /* ============ 特效 ============ */
-function starBurst() {
-  const wrap = document.createElement('div');
-  wrap.className = 'star-burst';
-  for (let i = 0; i < 24; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.textContent = ['⭐','✨','🌟','💫','🌸'][Math.floor(Math.random()*5)];
-    s.style.left = Math.random() * 100 + '%';
-    s.style.animationDelay = Math.random() * 0.5 + 's';
-    s.style.fontSize = (20 + Math.random() * 24) + 'px';
+function starBurst(){
+  const wrap=document.createElement('div');wrap.className='star-burst';
+  for(let i=0;i<24;i++){
+    const s=document.createElement('div');s.className='star';
+    s.textContent=['⭐','✨','🌟','💫'][Math.floor(Math.random()*4)];
+    s.style.left=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*0.5+'s';
+    s.style.fontSize=(20+Math.random()*24)+'px';
     wrap.appendChild(s);
   }
   document.body.appendChild(wrap);
-  setTimeout(() => wrap.remove(), 2200);
+  setTimeout(()=>wrap.remove(),2200);
 }
-function showEncourage(emoji, title, sub) {
-  const pop = document.createElement('div');
-  pop.className = 'encourage-pop';
-  pop.innerHTML = `
-    <div class="encourage-card">
-      <span class="emoji">${emoji}</span>
-      <div class="title">${title}</div>
-      <div class="sub">${sub}</div>
-    </div>`;
+function showEncourage(emoji,title,sub){
+  const pop=document.createElement('div');pop.className='encourage-pop';
+  pop.innerHTML=`<div class="encourage-card"><span class="emoji">${emoji}</span><div class="title">${title}</div><div class="sub">${sub}</div></div>`;
   document.body.appendChild(pop);
-  requestAnimationFrame(() => pop.classList.add('show'));
-  setTimeout(() => pop.remove(), 1900);
+  requestAnimationFrame(()=>pop.classList.add('show'));
+  setTimeout(()=>pop.remove(),1900);
 }
 
 /* ============ 奖励 ============ */
-function triggerReward() {
-  const modal = document.getElementById('rewardModal');
-  const box = document.getElementById('confettiBox');
-  box.innerHTML = '';
-  const colors = ['#e76f8e','#f4a4b7','#f0a830','#7cb342','#c6487a','#ffccd5'];
-  const shapes = ['🌸','⭐','✨','🌷','💫','🍃'];
-  for (let i = 0; i < 50; i++) {
-    const c = document.createElement('div');
-    if (Math.random() > 0.4) {
-      // 花瓣/表情
-      c.textContent = shapes[Math.floor(Math.random()*shapes.length)];
-      c.style.fontSize = (14 + Math.random()*10) + 'px';
-      c.style.background = 'transparent';
-      c.style.display = 'flex';
-      c.style.alignItems = 'center';
-      c.style.justifyContent = 'center';
-    } else {
-      c.style.background = colors[Math.floor(Math.random()*colors.length)];
-      if (Math.random() > 0.5) c.style.borderRadius = '50%';
-    }
-    c.className = 'confetti-piece';
-    c.style.left = Math.random() * 100 + '%';
-    c.style.animationDelay = Math.random() * 1.5 + 's';
-    c.style.animationDuration = (2 + Math.random() * 2) + 's';
+function triggerReward(){
+  const modal=document.getElementById('rewardModal');
+  const box=document.getElementById('confettiBox');box.innerHTML='';
+  const colors=['#58cc02','#1cb0f6','#ffc800','#ff4b4b','#ce82ff','#ff9600'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');c.className='confetti-piece';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDelay=Math.random()*1.5+'s';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    if(Math.random()>0.5)c.style.borderRadius='50%';
     box.appendChild(c);
   }
   modal.classList.add('show');
 }
-function claimReward() {
+function claimReward(){
   document.getElementById('rewardModal').classList.remove('show');
-  store.stars -= 30;
-  store.rewardCount += 1;
-  saveStore(store);
-  render();
-  showEncourage('🎁', '放松结束！', '休息好了，再来 30 颗吧～');
+  store.stars-=30;store.rewardCount+=1;saveStore(store);render();
+  showEncourage('🎁','放松结束！','休息好了，再来 30 颗吧～');
 }
 
-/* ============ 樱花飘落 ============ */
-function initSakura() {
-  const layer = document.getElementById('sakura-layer');
-  const petals = ['🌸','🌷','🌺','💮','🍃'];
-  const count = window.innerWidth < 600 ? 12 : 20;
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = petals[Math.floor(Math.random() * petals.length)];
-    p.style.left = Math.random() * 100 + '%';
-    p.style.fontSize = (14 + Math.random() * 14) + 'px';
-    p.style.animationDuration = (8 + Math.random() * 10) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
-    p.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-    p.style.opacity = 0.5 + Math.random() * 0.4;
-    layer.appendChild(p);
+/* ============ 每日通知 ============ */
+function openNotifySettings(){
+  document.getElementById('notifyModal').classList.add('show');
+  updateNotifyStatus();
+}
+function updateNotifyStatus(){
+  const st=document.getElementById('notifyStatus');
+  const btn=document.getElementById('btnNotify');
+  if(Notification.permission==='granted'&&store.notifyEnabled){
+    st.className='notify-status on';
+    st.textContent='✅ 已开启 · 每天 20:00 提醒';
+    btn.textContent='关闭提醒';
+  } else {
+    st.className='notify-status off';
+    st.textContent='🔔 未开启';
+    btn.textContent='开启提醒';
+  }
+}
+async function toggleNotify(){
+  if(store.notifyEnabled&&Notification.permission==='granted'){
+    store.notifyEnabled=false;saveStore(store);
+  } else {
+    if(Notification.permission!=='granted'){
+      const p=await Notification.requestPermission();
+      if(p!=='granted'){ alert('需要通知权限才能提醒哦'); return; }
+    }
+    store.notifyEnabled=true;saveStore(store);
+  }
+  updateNotifyStatus();
+}
+function checkNotifyTime(){
+  if(!store.notifyEnabled||Notification.permission!=='granted') return;
+  const now=new Date();
+  const key='notify_'+todayStr();
+  if(localStorage.getItem(key)) return; // 今天已通知
+  if(now.getHours()>=20){
+    localStorage.setItem(key,'1');
+    new Notification('📚 古诗打卡提醒',{
+      body:'今天还没打卡哦，该背一首古诗啦！点击开始 →',
+      icon:'icon-192.png',
+      tag:'daily-checkin'
+    });
   }
 }
 
-/* ============ 启动 ============ */
-initSakura();
+/* 启动 */
 render();
-</script>
-<script>
-// 注册 Service Worker 实现 PWA 离线 + 可安装
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(() => {
-      console.log('PWA 已就绪，可添加到主屏幕');
-    }).catch(err => console.warn('SW 注册失败:', err));
-  });
-}
-// iOS 已安装 standalone 检测提示
-if (window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && /iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.serviceWorker)) {
-  // 仅提示一次
-  if (!localStorage.getItem('ios_install_hint')) {
-    localStorage.setItem('ios_install_hint', '1');
-  }
-}
+checkNotifyTime();
+setInterval(checkNotifyTime,60000);
 </script>
 </body>
 </html>

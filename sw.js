@@ -1,5 +1,5 @@
 // 古诗打卡 PWA Service Worker - 离线缓存
-const CACHE_NAME = 'poetry-checkin-v2';
+const CACHE_NAME = 'poetry-checkin-v3';
 const ASSETS = [
   './',
   './index.html',
