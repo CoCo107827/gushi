@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6b8e23">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="古诗打卡">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-startup-image" href="splash-bg.jpg" media="(orientation: portrait)">
+<title>古诗打卡工作台 · 春日集星</title>
+<style>
+  :root {
+    --bg-1: #fff5f7;
+    --bg-2: #ffe4ec;
+    --bg-3: #fde2e4;
+    --card: rgba(255, 255, 255, 0.72);
+    --card-2: rgba(255, 255, 255, 0.9);
+    --border: rgba(233, 109, 135, 0.18);
+    --border-strong: rgba(233, 109, 135, 0.35);
+    --text: #5c3a4a;
+    --text-muted: #9a7384;
+    --accent: #e76f8e;
+    --accent-2: #f4a4b7;
+    --accent-deep: #d65a7a;
+    --success: #7cb342;
+    --success-2: #8bc34a;
+    --danger: #e57373;
+    --primary: #c6487a;
+    --primary-2: #d65a7a;
+    --gold: #f0a830;
+    --sakura-1: #ffb7c5;
+    --sakura-2: #ffccd5;
+    --sakura-3: #ffe0e9;
+    --leaf: #a8d8a0;
+    --radius: 18px;
+    --shadow: 0 8px 30px rgba(233, 109, 135, 0.18);
+    --shadow-hover: 0 12px 40px rgba(233, 109, 135, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-3) 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255, 183, 197, 0.45), transparent 40%),
+      radial-gradient(circle at 88% 75%, rgba(168, 216, 160, 0.25), transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(255, 204, 213, 0.2), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 1px, transparent 1px),
+      radial-gradient(circle at 70% 60%, rgba(255,255,255,0.3) 1px, transparent 1px);
+    background-size: 60px 60px, 90px 90px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* 樱花飘落层 */
+  #sakura-layer {
+    position: fixed; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    top: -30px;
+    font-size: 18px;
+    opacity: 0.85;
+    animation: petalFall linear infinite;
+    user-select: none;
+  }
+  @keyframes petalFall {
+    0% { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.85; }
+    90% { opacity: 0.85; }
+    100% { transform: translateY(105vh) translateX(var(--drift, 60px)) rotate(720deg); opacity: 0; }
+  }
+
+  .app {
+    position: relative; z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 100px;
+  }
+
+  /* 头部 */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 20px rgba(233, 109, 135, 0.4);
+    animation: sway 4s ease-in-out infinite;
+    position: relative;
+  }
+  .brand-icon::after {
+    content: '🌸';
+    position: absolute; top: -8px; right: -6px;
+    font-size: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .brand h1 {
+    font-size: 24px; font-weight: 800; letter-spacing: 1px;
+    color: var(--primary);
+  }
+  .brand p {
+    font-size: 13px; color: var(--text-muted); margin-top: 3px;
+  }
+  .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .today-badge {
+    padding: 10px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-muted);
+    backdrop-filter: blur(10px);
+  }
+  .today-badge span { color: var(--accent); font-weight: 700; }
+  .streak-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(255, 183, 197, 0.35), rgba(244, 164, 183, 0.25));
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-weight: 700;
+    color: var(--accent-deep);
+  }
+  .streak-pill .flame { font-size: 18px; animation: flicker 1.2s ease-in-out infinite; }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50% { transform: scale(1.15) rotate(3deg); }
+  }
+
+  /* 统计卡 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    backdrop-filter: blur(10px);
+    transition: transform .2s, box-shadow .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--glow, rgba(231,111,142,0.1));
+    filter: blur(15px);
+  }
+  .stat-card::after {
+    content: var(--deco, '🌸');
+    position: absolute; bottom: 8px; right: 12px;
+    font-size: 28px;
+    opacity: 0.25;
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+  .stat-label {
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 8px; letter-spacing: 1px;
+    position: relative; z-index: 1;
+  }
+  .stat-value {
+    font-size: 34px; font-weight: 800;
+    display: flex; align-items: baseline; gap: 4px;
+    position: relative; z-index: 1;
+  }
+  .stat-value .unit { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: var(--success); }
+  .stat-value.pink { color: var(--accent); }
+  .stat-value.purple { color: var(--primary); }
+  .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; position: relative; z-index: 1; }
+
+  /* 进度条 */
+  .progress-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-wrap::before {
+    content: '🌺';
+    position: absolute; top: 10px; right: 16px;
+    font-size: 24px; opacity: 0.3;
+    animation: sway 5s ease-in-out infinite;
+  }
+  .progress-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+  }
+  .progress-head h3 { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .progress-head .count { font-size: 14px; color: var(--text-muted); }
+  .progress-head .count b { color: var(--accent); font-size: 20px; }
+  .progress-bar {
+    height: 16px;
+    background: rgba(233, 109, 135, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--primary));
+    border-radius: 999px;
+    transition: width .8s cubic-bezier(.22,1,.36,1);
+    box-shadow: 0 0 16px rgba(231, 111, 142, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shine 2.5s linear infinite;
+  }
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .progress-milestones {
+    display: flex; justify-content: space-between;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .progress-milestones span.reached { color: var(--accent); font-weight: 700; }
+
+  /* 古诗网格 */
+  .section-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 700;
+    color: var(--primary);
+    margin: 28px 0 16px;
+  }
+  .section-title .ico { font-size: 22px; }
+  .poem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .poem-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    backdrop-filter: blur(10px);
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+  .poem-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-hover);
+  }
+  .poem-card.done {
+    background: linear-gradient(135deg, rgba(168, 216, 160, 0.2), rgba(124, 179, 66, 0.08));
+    border-color: rgba(124, 179, 66, 0.3);
+  }
+  .poem-card.done::before {
+    background: linear-gradient(180deg, var(--success), var(--leaf));
+  }
+  .poem-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .poem-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+  .poem-author { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .poem-status {
+    font-size: 11px; padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(233, 109, 135, 0.1);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .poem-status.done { background: rgba(124, 179, 66, 0.18); color: var(--success); }
+  .poem-status.today { background: rgba(240, 168, 48, 0.18); color: var(--gold); }
+  .poem-text {
+    font-size: 14px; line-height: 1.95;
+    color: var(--text);
+    margin: 10px 0 14px;
+    white-space: pre-line;
+    font-family: "Songti SC", "STSong", "SimSun", serif;
+    opacity: 0.85;
+  }
+  .poem-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    border: none; cursor: pointer;
+    font-family: inherit; font-weight: 700;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 14px;
+    transition: all .15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    color: white;
+    box-shadow: 0 4px 14px rgba(231, 111, 142, 0.35);
+  }
+  .btn-primary:hover { box-shadow: 0 6px 20px rgba(231, 111, 142, 0.5); }
+  .btn-gold {
+    background: linear-gradient(135deg, #ffd97b, var(--gold));
+    color: #6b4a00;
+    box-shadow: 0 4px 14px rgba(240, 168, 48, 0.35);
+  }
+  .btn-gold:hover { box-shadow: 0 6px 20px rgba(240, 168, 48, 0.5); }
+  .btn-ghost {
+    background: rgba(233, 109, 135, 0.08);
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: rgba(233, 109, 135, 0.15); }
+  .btn-success {
+    background: linear-gradient(135deg, var(--success-2), var(--success));
+    color: white;
+    box-shadow: 0 4px 14px rgba(124, 179, 66, 0.35);
+  }
+  .btn-danger {
+    background: rgba(229, 115, 115, 0.12);
+    color: var(--danger);
+    border: 1px solid rgba(229, 115, 115, 0.3);
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* 打卡历史 */
+  .history-list { display: flex; flex-direction: column; gap: 10px; }
+  .history-item {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    backdrop-filter: blur(10px);
+    transition: all .2s;
+  }
+  .history-item:hover { background: var(--card-2); transform: translateX(4px); }
+  .history-star { font-size: 24px; filter: drop-shadow(0 0 8px rgba(240,168,48,0.5)); }
+  .history-info { flex: 1; min-width: 0; }
+  .history-poem { font-weight: 700; font-size: 14px; color: var(--primary); }
+  .history-time { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .history-actions { display: flex; gap: 6px; }
+  .history-empty {
+    text-align: center; padding: 50px 20px;
+    color: var(--text-muted); font-size: 14px;
+  }
+  .history-empty .big { font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5; }
+
+  /* 弹窗 */
+  .modal-mask {
+    position: fixed; inset: 0;
+    background: rgba(232, 160, 180, 0.35);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-mask.show { display: flex; animation: fadeIn .25s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: linear-gradient(160deg, #fff9fb, #fff0f4);
+    border: 1px solid var(--border-strong);
+    border-radius: 24px;
+    padding: 28px;
+    max-width: 560px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(233, 109, 135, 0.3);
+    animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    color: var(--text);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 18px;
+  }
+  .modal-title { font-size: 20px; font-weight: 800; color: var(--primary); }
+  .modal-close {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(233, 109, 135, 0.12);
+    border: none; color: var(--accent);
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .modal-close:hover { background: rgba(233, 109, 135, 0.25); }
+
+  .poem-detail {
+    background: linear-gradient(135deg, rgba(255, 204, 213, 0.25), rgba(255, 224, 233, 0.15));
+    border: 1px dashed var(--border-strong);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    text-align: center;
+    position: relative;
+  }
+  .poem-detail::before {
+    content: '❀';
+    position: absolute; top: 8px; left: 12px;
+    color: var(--accent-2); font-size: 16px; opacity: 0.5;
+  }
+  .poem-detail::after {
+    content: '❀';
+    position: absolute; bottom: 8px; right: 12px;
+    color: var(--accent-2); font-size: 16px; opacity: 0.5;
+  }
+  .poem-detail h2 { font-size: 22px; margin-bottom: 6px; color: var(--primary); }
+  .poem-detail .author { color: var(--text-muted); font-size: 14px; margin-bottom: 14px; }
+  .poem-detail .text {
+    font-family: "Songti SC", "STSong", "SimSun", serif;
+    font-size: 17px; line-height: 2.1;
+    white-space: pre-line;
+    color: var(--text);
+  }
+
+  /* 视频录制 */
+  .recorder-wrap {
+    background: #2a2030;
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .recorder-wrap video {
+    width: 100%; height: 100%; object-fit: cover;
+    transform: scaleX(-1);
+  }
+  .recorder-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--sakura-1);
+    gap: 10px;
+    background: linear-gradient(135deg, #3a2a3a, #2a2030);
+  }
+  .recorder-placeholder .big-ico { font-size: 48px; animation: float 2s ease-in-out infinite; }
+  .rec-timer {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(229, 115, 115, 0.9);
+    color: white; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 13px;
+    display: none;
+    align-items: center; gap: 6px;
+  }
+  .rec-timer.show { display: flex; }
+  .rec-timer .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: white; animation: blink 1s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .recorder-controls {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+  .rec-hint {
+    font-size: 12px; color: var(--text-muted);
+    text-align: center; margin-top: 10px;
+  }
+
+  /* 星星飘落 */
+  .star-burst {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 200;
+    overflow: hidden;
+  }
+  .star-burst .star {
+    position: absolute;
+    font-size: 28px;
+    animation: fall 1.6s ease-in forwards;
+    filter: drop-shadow(0 0 10px rgba(240,168,48,0.7));
+  }
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* 多邻国式鼓励 */
+  .encourage-pop {
+    position: fixed; top: 45%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 250;
+    pointer-events: none;
+  }
+  .encourage-pop.show {
+    animation: encourageAnim 1.8s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes encourageAnim {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    25% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); opacity: 1; }
+    40% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8) translateY(-40px); opacity: 0; }
+  }
+  .encourage-card {
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    color: white;
+    padding: 24px 44px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(233, 109, 135, 0.5);
+    border: 4px solid rgba(255,255,255,0.4);
+    position: relative;
+  }
+  .encourage-card::before {
+    content: '🌸';
+    position: absolute; top: -18px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+  }
+  .encourage-card .emoji { font-size: 52px; display: block; margin-bottom: 8px; }
+  .encourage-card .title { font-size: 26px; font-weight: 800; }
+  .encourage-card .sub { font-size: 14px; opacity: 0.92; margin-top: 4px; }
+
+  /* 奖励弹窗 */
+  .reward-modal {
+    background: linear-gradient(160deg, #fff0f4, #ffe0e9);
+    border: 2px solid var(--accent);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .reward-modal::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(231,111,142,0.2), transparent 50%),
+      radial-gradient(circle at 70% 70%, rgba(240,168,48,0.18), transparent 50%);
+    pointer-events: none;
+  }
+  .reward-modal > * { position: relative; z-index: 1; }
+  .reward-trophy {
+    font-size: 88px;
+    animation: trophyBounce 1s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes trophyBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.08); }
+  }
+  .reward-title {
+    font-size: 32px; font-weight: 900;
+    background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 12px 0 8px;
+  }
+  .reward-sub {
+    font-size: 18px; color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .reward-confetti {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    animation: confettiFall 3s linear infinite;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+  }
+
+  /* 热力图 */
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .heat-cell {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: rgba(233, 109, 135, 0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--text-muted);
+    transition: transform .15s;
+  }
+  .heat-cell:hover { transform: scale(1.2); }
+  .heat-cell.l1 { background: rgba(231, 111, 142, 0.25); }
+  .heat-cell.l2 { background: rgba(231, 111, 142, 0.45); }
+  .heat-cell.l3 { background: rgba(231, 111, 142, 0.7); }
+  .heat-cell.l4 { background: var(--accent); color: white; }
+  .heat-cell.today { outline: 2px solid var(--gold); }
+
+  .tab-bar {
+    display: flex; gap: 8px; margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 18px;
+    background: none; border: none;
+    color: var(--text-muted);
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:hover { color: var(--primary); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn .3s; }
+
+  @media (max-width: 600px) {
+    .app { padding: 20px 14px 80px; }
+    .brand h1 { font-size: 20px; }
+    .stat-value { font-size: 28px; }
+    .modal { padding: 22px; }
+    .reward-title { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sakura-layer"></div>
+
+<div class="app">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">📜</div>
+      <div>
+        <h1>古诗打卡工作台</h1>
+        <p>🌸 春日集星，每日一首，视频背诵</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="streak-pill">
+        <span class="flame">🔥</span>
+        <span id="streakDays">0</span> 天连击
+      </div>
+      <div class="today-badge">今天是 <span id="todayDate">--</span></div>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="stat-card" style="--glow: rgba(240,168,48,0.15); --deco: '⭐'">
+      <div class="stat-label">⭐ 已获星星</div>
+      <div class="stat-value gold"><span id="starCount">0</span><span class="unit">/ 30</span></div>
+      <div class="stat-sub">集满 30 颗即可放松一下</div>
+    </div>
+    <div class="stat-card" style="--glow: rgba(124,179,66,0.15); --deco: '🌿'">
+      <div class="stat-label">✅ 累计打卡</div>
+      <div class="stat-value green"><span id="totalCheckin">0</span><span class="unit">次</span></div>
+      <div class="stat-sub">坚持就是胜利</div>
+    </div>
+    <div class="stat-card" style="--glow: rgba(231,111,142,0.15); --deco: '🌸'">
+      <div class="stat-label">📅 已背古诗</div>
+      <div class="stat-value pink"><span id="poemDone">0</span><span class="unit">/ <span id="poemTotal">0</span></span></div>
+      <div class="stat-sub">篇目进度</div>
+    </div>
+    <div class="stat-card" style="--glow: rgba(198,72,122,0.15); --deco: '🏆'">
+      <div class="stat-label">🏆 奖励次数</div>
+      <div class="stat-value purple"><span id="rewardCount">0</span><span class="unit">次</span></div>
+      <div class="stat-sub">满 30 星结算一次</div>
+    </div>
+  </section>
+
+  <section class="progress-wrap">
+    <div class="progress-head">
+      <h3>🌟 星星进度</h3>
+      <div class="count">已收集 <b id="progressStar">0</b> / 30 颗</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-milestones">
+      <span data-ms="5">5</span>
+      <span data-ms="10">10</span>
+      <span data-ms="15">15</span>
+      <span data-ms="20">20</span>
+      <span data-ms="25">25</span>
+      <span data-ms="30">🏆 30</span>
+    </div>
+  </section>
+
+  <div class="tab-bar">
+    <button class="tab active" data-tab="poems">📖 古诗列表</button>
+    <button class="tab" data-tab="history">🕒 打卡历史</button>
+    <button class="tab" data-tab="calendar">📅 打卡日历</button>
+  </div>
+
+  <div class="tab-panel active" id="panel-poems">
+    <div class="poem-grid" id="poemGrid"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-history">
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-calendar">
+    <div class="progress-wrap" style="margin-bottom:0;">
+      <div class="progress-head">
+        <h3>📅 近 28 天打卡热力图</h3>
+        <div class="count" style="font-size:12px;">颜色越深打卡越多</div>
+      </div>
+      <div class="heatmap" id="heatmap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 打卡弹窗 -->
+<div class="modal-mask" id="checkinModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">🎬 视频背诵打卡</div>
+      <button class="modal-close" onclick="closeCheckin()">✕</button>
+    </div>
+    <div class="poem-detail" id="checkinPoem"></div>
+    <div class="recorder-wrap">
+      <video id="recVideo" autoplay muted playsinline></video>
+      <div class="recorder-placeholder" id="recPlaceholder">
+        <div class="big-ico">📷</div>
+        <div>点击下方按钮开启摄像头</div>
+      </div>
+      <div class="rec-timer" id="recTimer"><span class="dot"></span><span id="recTime">00:00</span></div>
+    </div>
+    <div class="recorder-controls">
+      <button class="btn btn-ghost" id="btnStartCam" onclick="startCamera()">📷 开启摄像头</button>
+      <button class="btn btn-primary" id="btnStartRec" onclick="startRecording()" disabled>⏺ 开始录制</button>
+      <button class="btn btn-danger" id="btnStopRec" onclick="stopRecording()" disabled>⏹ 停止</button>
+      <button class="btn btn-gold" id="btnSubmit" onclick="submitCheckin()" disabled>⭐ 提交打卡</button>
+    </div>
+    <div class="rec-hint">背诵完成后点击「停止」，预览确认无误后「提交打卡」即可获得 ⭐</div>
+  </div>
+</div>
+
+<!-- 视频回放弹窗 -->
+<div class="modal-mask" id="playModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="playTitle">📹 背诵回放</div>
+      <button class="modal-close" onclick="closePlay()">✕</button>
+    </div>
+    <div class="recorder-wrap" style="aspect-ratio:16/9;">
+      <video id="playVideo" controls playsinline style="transform:none;"></video>
+    </div>
+  </div>
+</div>
+
+<!-- 奖励弹窗 -->
+<div class="modal-mask" id="rewardModal">
+  <div class="modal reward-modal">
+    <div class="reward-confetti" id="confettiBox"></div>
+    <div class="reward-trophy">🏆</div>
+    <div class="reward-title">这么厉害！</div>
+    <div class="reward-sub">你已集满 30 颗星星 🌟<br>快让自己放松一会儿吧！🎉</div>
+    <button class="btn btn-gold" onclick="claimReward()" style="padding:14px 32px; font-size:16px;">🎁 领取奖励</button>
+  </div>
+</div>
+
+<script>
+/* ============ 古诗数据：部编版八年级上册语文必背篇目 ============ */
+const POEMS = [
+  { id: 1, title: "三峡", author: "北魏 · 郦道元", text: "自三峡七百里中，两岸连山，略无阙处。重岩叠嶂，隐天蔽日，自非亭午夜分，不见曦月。\n\n至于夏水襄陵，沿溯阻绝。或王命急宣，有时朝发白帝，暮到江陵，其间千二百里，虽乘奔御风，不以疾也。\n\n春冬之时，则素湍绿潭，回清倒影，绝巘多生怪柏，悬泉瀑布，飞漱其间，清荣峻茂，良多趣味。\n\n每至晴初霜旦，林寒涧肃，常有高猿长啸，属引凄异，空谷传响，哀转久绝。故渔者歌曰：\“巴东三峡巫峡长，猿鸣三声泪沾裳。”" },
+  { id: 2, title: "答谢中书书", author: "南朝齐梁 · 陶弘景", text: "山川之美，古来共谈。高峰入云，清流见底。两岸石壁，五色交辉。青林翠竹，四时俱备。晓雾将歇，猿鸟乱鸣；夕日欲颓，沉鳞竞跃。实是欲界之仙都。自康乐以来，未复有能与其奇者。" },
+  { id: 3, title: "记承天寺夜游", author: "宋 · 苏轼", text: "元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。念无与为乐者，遂至承天寺寻张怀民。怀民亦未寝，相与步于中庭。庭下如积水空明，水中藻、荇交横，盖竹柏影也。何夜无月？何处无竹柏？但少闲人如吾两人者耳。" },
+  { id: 4, title: "生于忧患，死于安乐", author: "《孟子》", text: "舜发于畎亩之中，傅说举于版筑之间，胶鬲举于鱼盐之中，管夷吾举于士，孙叔敖举于海，百里奚举于市。故天将降大任于是人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，曾益其所不能。\n\n人恒过，然后能改；困于心，衡于虑，而后作；征于色，发于声，而后喻。入则无法家拂士，出则无敌国外患者，国恒亡。然后知生于忧患而死于安乐也。" },
+  { id: 5, title: "野望", author: "唐 · 王绩", text: "东皋薄暮望，徙倚欲何依。\n树树皆秋色，山山唯落晖。\n牧人驱犊返，猎马带禽归。\n相顾无相识，长歌怀采薇。" },
+  { id: 6, title: "黄鹤楼", author: "唐 · 崔颢", text: "昔人已乘黄鹤去，此地空余黄鹤楼。\n黄鹤一去不复返，白云千载空悠悠。\n晴川历历汉阳树，芳草萋萋鹦鹉洲。\n日暮乡关何处是？烟波江上使人愁。" },
+  { id: 7, title: "使至塞上", author: "唐 · 王维", text: "单车欲问边，属国过居延。\n征蓬出汉塞，归雁入胡天。\n大漠孤烟直，长河落日圆。\n萧关逢候骑，都护在燕然。" },
+  { id: 8, title: "渡荆门送别", author: "唐 · 李白", text: "渡远荆门外，来从楚国游。\n山随平野尽，江入大荒流。\n月下飞天镜，云生结海楼。\n仍怜故乡水，万里送行舟。" },
+  { id: 9, title: "钱塘湖春行", author: "唐 · 白居易", text: "孤山寺北贾亭西，水面初平云脚低。\n几处早莺争暖树，谁家新燕啄春泥。\n乱花渐欲迷人眼，浅草才能没马蹄。\n最爱湖东行不足，绿杨阴里白沙堤。" },
+  { id: 10, title: "庭中有奇树", author: "《古诗十九首》", text: "庭中有奇树，绿叶发华滋。\n攀条折其荣，将以遗所思。\n馨香盈怀袖，路远莫致之。\n此物何足贵？但感别经时。" },
+  { id: 11, title: "龟虽寿", author: "汉 · 曹操", text: "神龟虽寿，犹有竟时。\n腾蛇乘雾，终为土灰。\n老骥伏枥，志在千里。\n烈士暮年，壮心不已。\n盈缩之期，不但在天；\n养怡之福，可得永年。\n幸甚至哉，歌以咏志。" },
+  { id: 12, title: "赠从弟（其二）", author: "汉 · 刘桢", text: "亭亭山上松，瑟瑟谷中风。\n风声一何盛，松枝一何劲。\n冰霜正惨凄，终岁常端正。\n岂不罹凝寒？松柏有本性。" },
+  { id: 13, title: "梁甫行", author: "汉 · 曹植", text: "八方各异气，千里殊风雨。\n剧哉边海民，寄身于草野。\n妻子象禽兽，行止依林阻。\n柴门何萧条，狐兔翔我宇。" }
+];
+
+/* ============ 数据存储 ============ */
+const STORE_KEY = 'poetry_checkin_v1';
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { stars: 0, totalStars: 0, history: [], rewardCount: 0, lastCheckinDate: null, streak: 0 };
+}
+function saveStore(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+let store = loadStore();
+
+/* 视频单独存 IndexedDB */
+const DB_NAME = 'poetry_videos';
+const STORE_V = 'videos';
+function openVideoDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_V)) db.createObjectStore(STORE_V, { keyPath: 'id' });
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e);
+  });
+}
+async function saveVideo(id, blob) {
+  const db = await openVideoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_V, 'readwrite');
+    tx.objectStore(STORE_V).put({ id, blob });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+async function getVideo(id) {
+  const db = await openVideoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_V, 'readonly');
+    const req = tx.objectStore(STORE_V).get(id);
+    req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* ============ 工具 ============ */
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function fmtDateTime(ts) {
+  const d = new Date(ts);
+  return `${d.getMonth()+1}月${d.getDate()}日 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function getStreak() {
+  if (store.history.length === 0) return 0;
+  const days = [...new Set(store.history.map(h => h.date))].sort().reverse();
+  if (days.length === 0) return 0;
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 400; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    if (days.includes(ds)) streak++;
+    else if (i === 0) continue;
+    else break;
+  }
+  return streak;
+}
+
+/* ============ 渲染 ============ */
+function render() {
+  const d = new Date();
+  document.getElementById('todayDate').textContent = `${d.getMonth()+1}月${d.getDate()}日`;
+  document.getElementById('streakDays').textContent = getStreak();
+
+  const stars = store.stars;
+  document.getElementById('starCount').textContent = stars;
+  document.getElementById('progressStar').textContent = stars;
+  document.getElementById('totalCheckin').textContent = store.history.length;
+  document.getElementById('rewardCount').textContent = store.rewardCount;
+  const doneIds = [...new Set(store.history.map(h => h.poemId))];
+  document.getElementById('poemDone').textContent = doneIds.length;
+  document.getElementById('poemTotal').textContent = POEMS.length;
+
+  const pct = Math.min(100, (stars / 30) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.querySelectorAll('.progress-milestones span').forEach(s => {
+    const ms = parseInt(s.dataset.ms);
+    s.classList.toggle('reached', stars >= ms);
+  });
+
+  const grid = document.getElementById('poemGrid');
+  const todayPoem = store.history.find(h => h.date === todayStr());
+  grid.innerHTML = POEMS.map(p => {
+    const done = doneIds.includes(p.id);
+    const isToday = todayPoem && todayPoem.poemId === p.id;
+    let statusCls = '', statusTxt = '未打卡';
+    if (isToday) { statusCls = 'today'; statusTxt = '今日已打'; }
+    else if (done) { statusCls = 'done'; statusTxt = '已完成'; }
+    return `
+      <div class="poem-card ${done ? 'done' : ''}">
+        <div class="poem-head">
+          <div>
+            <div class="poem-title">${p.title}</div>
+            <div class="poem-author">${p.author}</div>
+          </div>
+          <div class="poem-status ${statusCls}">${statusTxt}</div>
+        </div>
+        <div class="poem-text">${p.text}</div>
+        <div class="poem-actions">
+          <button class="btn btn-gold" onclick="openCheckin(${p.id})">🎬 打卡背诵</button>
+          ${done ? `<button class="btn btn-ghost" onclick="playVideo(${p.id})">▶ 回看</button>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  const hl = document.getElementById('historyList');
+  if (store.history.length === 0) {
+    hl.innerHTML = '<div class="history-empty"><span class="big">🌸</span>还没有打卡记录，快去背一首吧～</div>';
+  } else {
+    hl.innerHTML = store.history.slice().reverse().map(h => {
+      const p = POEMS.find(x => x.id === h.poemId);
+      return `
+        <div class="history-item">
+          <div class="history-star">⭐</div>
+          <div class="history-info">
+            <div class="history-poem">${p ? p.title : '未知'} · ${p ? p.author : ''}</div>
+            <div class="history-time">${fmtDateTime(h.ts)}</div>
+          </div>
+          <div class="history-actions">
+            <button class="btn btn-ghost" onclick="playVideo(${h.poemId})">▶</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  renderHeatmap();
+}
+
+function renderHeatmap() {
+  const wrap = document.getElementById('heatmap');
+  const today = new Date();
+  const dayCount = {};
+  store.history.forEach(h => { dayCount[h.date] = (dayCount[h.date] || 0) + 1; });
+  const cells = [];
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const c = dayCount[ds] || 0;
+    let cls = '';
+    if (c >= 4) cls = 'l4';
+    else if (c === 3) cls = 'l3';
+    else if (c === 2) cls = 'l2';
+    else if (c === 1) cls = 'l1';
+    if (ds === todayStr()) cls += ' today';
+    cells.push(`<div class="heat-cell ${cls}" title="${ds}: ${c}次">${d.getDate()}</div>`);
+  }
+  wrap.innerHTML = cells.join('');
+}
+
+/* ============ Tab 切换 ============ */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+  });
+});
+
+/* ============ 打卡流程 ============ */
+let currentPoem = null;
+let mediaStream = null;
+let mediaRecorder = null;
+let recChunks = [];
+let recBlob = null;
+let recTimerInterval = null;
+let recStartTime = 0;
+
+function openCheckin(poemId) {
+  currentPoem = POEMS.find(p => p.id === poemId);
+  document.getElementById('checkinPoem').innerHTML = `
+    <h2>${currentPoem.title}</h2>
+    <div class="author">${currentPoem.author}</div>
+    <div class="text">${currentPoem.text}</div>
+  `;
+  resetRecorder();
+  document.getElementById('checkinModal').classList.add('show');
+}
+function closeCheckin() {
+  document.getElementById('checkinModal').classList.remove('show');
+  stopCamera();
+  resetRecorder();
+}
+function resetRecorder() {
+  recBlob = null;
+  recChunks = [];
+  const v = document.getElementById('recVideo');
+  v.srcObject = null;
+  v.src = '';
+  v.controls = false;
+  v.muted = true;
+  document.getElementById('recPlaceholder').style.display = 'flex';
+  document.getElementById('btnStartRec').disabled = true;
+  document.getElementById('btnStopRec').disabled = true;
+  document.getElementById('btnSubmit').disabled = true;
+  document.getElementById('recTimer').classList.remove('show');
+  if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
+}
+
+async function startCamera() {
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: true });
+    document.getElementById('recVideo').srcObject = mediaStream;
+    document.getElementById('recPlaceholder').style.display = 'none';
+    document.getElementById('btnStartRec').disabled = false;
+  } catch (e) {
+    alert('无法访问摄像头/麦克风：' + e.message + '\n请确认浏览器已授权，且使用 https 或 localhost 访问。');
+  }
+}
+function stopCamera() {
+  if (mediaStream) {
+    mediaStream.getTracks().forEach(t => t.stop());
+    mediaStream = null;
+  }
+}
+
+function startRecording() {
+  if (!mediaStream) return;
+  recChunks = [];
+  const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
+             : MediaRecorder.isTypeSupported('video/webm;codecs=vp8') ? 'video/webm;codecs=vp8'
+             : 'video/webm';
+  try {
+    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: mime });
+  } catch (e) {
+    mediaRecorder = new MediaRecorder(mediaStream);
+  }
+  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
+  mediaRecorder.onstop = () => {
+    recBlob = new Blob(recChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(recBlob);
+    const v = document.getElementById('recVideo');
+    v.srcObject = null;
+    v.src = url;
+    v.muted = false;
+    v.controls = true;
+    document.getElementById('btnSubmit').disabled = false;
+  };
+  mediaRecorder.start();
+  recStartTime = Date.now();
+  document.getElementById('recTimer').classList.add('show');
+  document.getElementById('btnStartRec').disabled = true;
+  document.getElementById('btnStopRec').disabled = false;
+  recTimerInterval = setInterval(() => {
+    const s = Math.floor((Date.now() - recStartTime) / 1000);
+    document.getElementById('recTime').textContent =
+      `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  }, 200);
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+  if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
+  document.getElementById('recTimer').classList.remove('show');
+  document.getElementById('btnStopRec').disabled = true;
+  document.getElementById('btnStartRec').disabled = false;
+  stopCamera();
+}
+
+async function submitCheckin() {
+  if (!recBlob || !currentPoem) return;
+  const videoId = `v_${currentPoem.id}_${Date.now()}`;
+  try { await saveVideo(videoId, recBlob); } catch(e) { console.warn('视频保存失败', e); }
+
+  const now = new Date();
+  const record = {
+    poemId: currentPoem.id,
+    poemTitle: currentPoem.title,
+    ts: now.getTime(),
+    date: todayStr(),
+    videoId
+  };
+  store.history.push(record);
+  store.stars += 1;
+  store.totalStars += 1;
+  saveStore(store);
+
+  closeCheckin();
+  render();
+
+  starBurst();
+
+  const msgs = [
+    { e: '🎉', t: '太棒了！', s: '又收获一颗星星 ⭐' },
+    { e: '🌸', t: '春暖花开！', s: '你背得真好听' },
+    { e: '🔥', t: '连击中！', s: '保持节奏，继续加油' },
+    { e: '✨', t: '完美背诵！', s: '你真是个小诗人' },
+    { e: '🌷', t: '厉害！', s: '古诗达人就是你' },
+    { e: '💪', t: '加油！', s: '坚持就是胜利' },
+    { e: '🌟', t: '闪耀！', s: '星星正在向你聚集' },
+    { e: '🍃', t: '清新！', s: '字字句句都动人' }
+  ];
+  const m = msgs[Math.floor(Math.random() * msgs.length)];
+  showEncourage(m.e, m.t, m.s);
+
+  if (store.stars >= 30) {
+    setTimeout(() => triggerReward(), 1500);
+  }
+}
+
+/* ============ 视频回放 ============ */
+async function playVideo(poemId) {
+  const rec = store.history.slice().reverse().find(h => h.poemId === poemId);
+  if (!rec || !rec.videoId) { alert('暂无视频'); return; }
+  const blob = await getVideo(rec.videoId);
+  if (!blob) { alert('视频已丢失'); return; }
+  const p = POEMS.find(x => x.id === poemId);
+  document.getElementById('playTitle').textContent = `📹 ${p.title} · 背诵回放`;
+  const v = document.getElementById('playVideo');
+  v.src = URL.createObjectURL(blob);
+  document.getElementById('playModal').classList.add('show');
+}
+function closePlay() {
+  const v = document.getElementById('playVideo');
+  v.pause(); v.src = '';
+  document.getElementById('playModal').classList.remove('show');
+}
+
+/* ============ 特效 ============ */
+function starBurst() {
+  const wrap = document.createElement('div');
+  wrap.className = 'star-burst';
+  for (let i = 0; i < 24; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = ['⭐','✨','🌟','💫','🌸'][Math.floor(Math.random()*5)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 0.5 + 's';
+    s.style.fontSize = (20 + Math.random() * 24) + 'px';
+    wrap.appendChild(s);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(() => wrap.remove(), 2200);
+}
+function showEncourage(emoji, title, sub) {
+  const pop = document.createElement('div');
+  pop.className = 'encourage-pop';
+  pop.innerHTML = `
+    <div class="encourage-card">
+      <span class="emoji">${emoji}</span>
+      <div class="title">${title}</div>
+      <div class="sub">${sub}</div>
+    </div>`;
+  document.body.appendChild(pop);
+  requestAnimationFrame(() => pop.classList.add('show'));
+  setTimeout(() => pop.remove(), 1900);
+}
+
+/* ============ 奖励 ============ */
+function triggerReward() {
+  const modal = document.getElementById('rewardModal');
+  const box = document.getElementById('confettiBox');
+  box.innerHTML = '';
+  const colors = ['#e76f8e','#f4a4b7','#f0a830','#7cb342','#c6487a','#ffccd5'];
+  const shapes = ['🌸','⭐','✨','🌷','💫','🍃'];
+  for (let i = 0; i < 50; i++) {
+    const c = document.createElement('div');
+    if (Math.random() > 0.4) {
+      // 花瓣/表情
+      c.textContent = shapes[Math.floor(Math.random()*shapes.length)];
+      c.style.fontSize = (14 + Math.random()*10) + 'px';
+      c.style.background = 'transparent';
+      c.style.display = 'flex';
+      c.style.alignItems = 'center';
+      c.style.justifyContent = 'center';
+    } else {
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      if (Math.random() > 0.5) c.style.borderRadius = '50%';
+    }
+    c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.animationDelay = Math.random() * 1.5 + 's';
+    c.style.animationDuration = (2 + Math.random() * 2) + 's';
+    box.appendChild(c);
+  }
+  modal.classList.add('show');
+}
+function claimReward() {
+  document.getElementById('rewardModal').classList.remove('show');
+  store.stars -= 30;
+  store.rewardCount += 1;
+  saveStore(store);
+  render();
+  showEncourage('🎁', '放松结束！', '休息好了，再来 30 颗吧～');
+}
+
+/* ============ 樱花飘落 ============ */
+function initSakura() {
+  const layer = document.getElementById('sakura-layer');
+  const petals = ['🌸','🌷','🌺','💮','🍃'];
+  const count = window.innerWidth < 600 ? 12 : 20;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (14 + Math.random() * 14) + 'px';
+    p.style.animationDuration = (8 + Math.random() * 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
+    p.style.opacity = 0.5 + Math.random() * 0.4;
+    layer.appendChild(p);
+  }
+}
+
+/* ============ 启动 ============ */
+initSakura();
+render();
+</script>
+<script>
+// 注册 Service Worker 实现 PWA 离线 + 可安装
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(() => {
+      console.log('PWA 已就绪，可添加到主屏幕');
+    }).catch(err => console.warn('SW 注册失败:', err));
+  });
+}
+// iOS 已安装 standalone 检测提示
+if (window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && /iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.serviceWorker)) {
+  // 仅提示一次
+  if (!localStorage.getItem('ios_install_hint')) {
+    localStorage.setItem('ios_install_hint', '1');
+  }
+}
+</script>
+</body>
+</html>
